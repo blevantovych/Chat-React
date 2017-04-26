@@ -14,6 +14,7 @@ class App extends Component {
         super(props);
         this.state = {
             messages: [],
+            filterUsersBy: '',
             users: []
         }
     }
@@ -31,13 +32,18 @@ class App extends Component {
     getMessages = () => {
         fetch('http://eleksfrontendcamp-mockapitron.rhcloud.com/messages')
             .then(res => res.json())
-            .then(res => this.setState({messages: res}))
+            .then(res => this.setState({messages: res.filter(m => typeof m.msg === 'string')}))
     }
 
     getUsers = () => {
         fetch('http://eleksfrontendcamp-mockapitron.rhcloud.com/users')
             .then(res => res.json())
-            .then(res => this.setState({users: res}))
+            .then(res => this.setState({users: res.filter(u => !!u.username)}))
+    }
+
+    changeUserListFilter (filterUsersBy) {
+        console.log('changin userlist filter');
+        this.setState({filterUsersBy})
     }
 
     render() {
@@ -46,8 +52,13 @@ class App extends Component {
                 <div>
                     <Header />
                     <div class="container">
-                        <UserList users={this.state.users} />
-                        <MessageList messages={this.state.messages}/>
+                        <UserList users={this.state.users.filter(u => u.username.includes(this.state.filterUsersBy))}
+                            onInputChange={this.changeUserListFilter.bind(this)}
+                        />
+
+                        <MessageList
+                            messages={this.state.messages}
+                        />
                     </div>
                 </div>
             </MuiThemeProvider>
