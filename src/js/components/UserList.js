@@ -5,6 +5,7 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
+import { Card } from 'material-ui';
 import TextField from 'material-ui/TextField';
 
 
@@ -13,16 +14,21 @@ class UserList extends Component {
         super(props);
 
     }
+
+     //primaryText={user.username}
+                //leftAvatar={<Avatar src={`https://randomuser.me/api/portraits/med/women/${Math.round(Math.random()*99)}.jpg`} />}
+//                rightIcon={<CommunicationChatBubble />}
     
     render() {
         console.log(this.props);
 
-        const userList = this.props.users.filter(user => !!user.username).map(user => (
-            <ListItem
-                primaryText={user.username}
-                //leftAvatar={<Avatar src={`https://randomuser.me/api/portraits/med/women/${Math.round(Math.random()*99)}.jpg`} />}
-//                rightIcon={<CommunicationChatBubble />}
-            />
+        const userList = this.props.users.map(user => (
+            <ListItem>
+                <Card>
+                    <div style={{padding: '20px'}}>{user}</div>
+                </Card>
+               
+            </ListItem>
         ));
 
         return (

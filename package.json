@@ -34,7 +34,7 @@
     "style-loader": "^0.16.1"
   },
   "scripts": {
-    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base src --inline --hot",
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --port 5001 --content-base src --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -11,6 +11,10 @@ class MessageList extends PureComponent {
                 <Avatar src={`https://randomuser.me/api/portraits/med/women/${Math.round(Math.random()*100)}.jpg`} />
                 <CardText>
                     {message.msg}
+                    <br/>
+                    {(new Date(message.time)).toLocaleString()}
+                    <br/>
+                    {message.user.username}
                 </CardText>
             </Card>
         ));

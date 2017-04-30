@@ -1,15 +1,15 @@
-import React, { Component, PureComponent } from 'react';
-import { TextField, RaisedButton } from 'material-ui';
+import React, { Component } from 'react';
 import { formWrapper, formStyles } from './formStyles';
+import { TextField, RaisedButton } from 'material-ui';
 
-class Login extends Component {
+class Signup extends Component {
 
     constructor(props) {
         super(props);
-        this.state ={
-            password: '',
+        this.state = {
+            buttonDisabled: false,
             username: '',
-            buttonDisabled: false
+            password: ''
         }
     }
 
@@ -33,15 +33,16 @@ class Login extends Component {
                         onChange={(e) => this.setState({password: e.target.value})}
                     />
 
-                    <RaisedButton label="Login"
+                    <RaisedButton label="Sign up"
                         primary={true}
                         disabled={this.state.buttonDisabled}
-                        onClick={() => this.props.onLoginClick(this.state.username, this.state.password)}
+                        onClick={() => this.props.onSignupClick(this.state.username, this.state.password)}
                     />
+
                 </div>
             </div>
         );
     }
 }
 
-export default Login;
+export default Signup;

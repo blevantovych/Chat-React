@@ -4,6 +4,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Hamburger from 'material-ui/svg-icons/navigation/menu';
+import FlatButton from 'material-ui/FlatButton';
 
 const Menu = (props) => (
     <IconMenu
@@ -21,17 +22,22 @@ const Menu = (props) => (
 
 
 class Header extends Component {
+
     render() {
+
+        const logoutButton = this.props.logged ?
+            <FlatButton onTouchTap={this.props.onLogoutClick}  label="Logout" />
+            : null
         return (
-            <AppBar
-                //style={{position: 'fixed', top: 0, width: '60vw'}}
-                title={this.props.title || 'CHAT'}
-                showMenuIconButton={false}
-                iconElementRight={<Menu onMenuChange={this.props.onMenuChange || ( () => console.log('Menu Changed') )} />}
-            />
+            <div>
+                <AppBar
+                    title={this.props.title || 'CHAT'}
+                    showMenuIconButton={false}
+                    iconElementRight={logoutButton}
+                />
+            </div>
         );
     }
 }
 
-export default Header
-;
+export default Header;
