@@ -9,7 +9,8 @@ class Signup extends Component {
         this.state = {
             buttonDisabled: false,
             username: '',
-            password: ''
+            password: '',
+            email: ''
         }
     }
 
@@ -27,6 +28,14 @@ class Signup extends Component {
 
                     <TextField
                         style={{width: '400px'}}
+                        floatingLabelText="Email"
+                        type="email"
+                        defaultValue={this.state.email}
+                        onChange={(e) => this.setState({email: e.target.value})}
+                    />
+
+                    <TextField
+                        style={{width: '400px'}}
                         floatingLabelText="Password"
                         type="password"
                         defaultValue={this.state.password}
@@ -36,7 +45,7 @@ class Signup extends Component {
                     <RaisedButton label="Sign up"
                         primary={true}
                         disabled={this.state.buttonDisabled}
-                        onClick={() => this.props.onSignupClick(this.state.username, this.state.password)}
+                        onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password)}
                     />
 
                 </div>

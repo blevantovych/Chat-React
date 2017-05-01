@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import UserList from './UserList';
+import React, { Component } from 'react'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import UserList from './UserList'
 
-import Header from './Header';
-import MessageList from './MessageList';
-import './main.scss';
-import './reset.scss';
-import HelloWorld from './HelloWorld';
+import Header from './Header'
+import MessageList from './MessageList'
+import './main.scss'
+import './reset.scss'
+
+import Chat from './Chat'
 
 import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
 
+import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL } from '../API_URLS'
+
 class App extends Component {
     
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             messages: [],
             filterUsersBy: '',
@@ -27,7 +30,7 @@ class App extends Component {
     }
 
     logout = () => {
-        console.log('loggin out');
+        console.log('loggin out')
         this.setState({logged: false})
         this.state.socket.disconnect()
     }
@@ -35,10 +38,10 @@ class App extends Component {
     login = (username, password) => {
         console.log(`trying to login with
                       username: ${username}
-                      password: ${password}`);
+                      password: ${password}`)
             
-        let myHeaders = new Headers();
-        myHeaders.set('Content-Type', 'application/json'); 
+        let myHeaders = new Headers()
+        myHeaders.set('Content-Type', 'application/json') 
 
         let myInit = {
             method: 'post',
@@ -46,76 +49,96 @@ class App extends Component {
             mode: 'cors',
             body: JSON.stringify({ username, password })
         }
-        // const url = 'http://eleksfrontendcamp-mockapitron.rhcloud.com/login'
-        const url = 'http://localhost:3000/login'
-        fetch(url, myInit)
+        fetch(LOGIN_URL, myInit)
             .then(res => res.json())
             .then(({
                 token
             }) => {
-                console.log(token);
-                this.boom(token);
+                console.log(token)
+                this.boom(token)
                 this.setState({logged: true})
             })
     }
 
-    signup = () => {
-        console.log('signing up');
+    signup = (username, email, password) => {
+        console.log(`trying to sign up with
+                      username: ${username}
+                      password: ${password}
+                      email: ${email}`)
+            
+        let myHeaders = new Headers()
+        myHeaders.set('Content-Type', 'application/json') 
 
+        let myInit = {
+            method: 'post',
+            headers: myHeaders,
+            mode: 'cors',
+            body: JSON.stringify({ username, email, password })
+        }
+        fetch(SIGNUP_URL, myInit)
+            .then(res => console.log(res))
+            .then((res) => {
+                // console.log(res)
+                this.login(username, password)
+                // this.setState({logged: true})
+            })
     }
 
+    sendMessage = (text) => {
+        this.state.socket.emit('message', text)
+    } 
+
     boom (token) {
-        const socket = io.connect('http://localhost:3000');
+        const socket = io.connect(SOCKET_URL)
         this.setState({socket})
 
         socket.on('connect', () => {
-            console.log('connected');
+            console.log('connected')
             socket.emit('authenticate', { token })
         })
 
-        const log = console.log.bind(console);
-        socket.on('message', log);
+        const log = console.log.bind(console)
+        socket.on('message', log)
 
-        socket.on('join',log);
+        socket.on('join',log)
 
-        socket.on('leave',log);
+        socket.on('leave',log)
         // setTimeout(() => {
             // socket.emit('message', 'good morning')
-        // }, 1000);
+        // }, 1000)
 
     }
     
     componentDidMount() {
-        this.getUsers();
-        this.getMessages();
+        this.getUsers()
+        this.getMessages()
     }
     
-
     componentWillMount() {
-        injectTapEventPlugin();
+        injectTapEventPlugin()
     }
     
     getMessages = () => {
-        fetch('http://eleksfrontendcamp-mockapitron.rhcloud.com/messages')
+        fetch(MESSAGES_URL)
             .then(res => res.json())
             .then(res => this.setState({messages: res.filter(m => typeof m.msg === 'string')}))
     }
 
     getUsers = () => {
-        fetch('http://eleksfrontendcamp-mockapitron.rhcloud.com/users')
+        fetch(USERS_URL)
             .then(res => res.json())
             .then(res => this.setState({users: res.filter(u => !!u.username)}))
     }
 
     changeUserListFilter (filterUsersBy) {
-        console.log('changin userlist filter');
+        console.log('changin userlist filter')
         this.setState({filterUsersBy})
     }
 
     render() {
 
         const mainContent = this.state.logged ?
-                                <HelloWorld /> :
+                                    <Chat onSendClick={this.sendMessage}/> :
                                 <Tabs onLoginClick={this.login} onSignupClick={this.signup} />
         return (
             <MuiThemeProvider>
@@ -129,9 +152,9 @@ class App extends Component {
                                             .filter(u => !!u.username)
                                             .filter(u => u.username.includes(this.state.filterUsersBy))
                                             .map(u => {
-                                                const start = u.username.indexOf(this.state.filterUsersBy);
-                                                const end = start + this.state.filterUsersBy.length;
-                                                const subStringToHightLight = u.username.substring(start, end);
+                                                const start = u.username.indexOf(this.state.filterUsersBy)
+                                                const end = start + this.state.filterUsersBy.length
+                                                const subStringToHightLight = u.username.substring(start, end)
                                                 return (<div>
                                                             {u.username.slice(0, start)}
                                                             <span class="highlight">{subStringToHightLight}</span>
@@ -148,8 +171,8 @@ class App extends Component {
                     </div>*/}
                 </div>
             </MuiThemeProvider>
-        );
+        )
     }
 }
 
-export default App;
+export default App
