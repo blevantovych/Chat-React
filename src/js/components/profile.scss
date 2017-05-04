@@ -1,0 +1,32 @@
+.profile-image {
+    width: 100px;
+}
+
+.profile-wrapper {
+    border: 1px solid red;
+    display: flex;
+    width: 80vw;
+    margin: auto;
+}
+
+.file-input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+}
+
+.image-upload {
+    height: 160px;
+    width: 150px;
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    // align-content: center;
+    align-items: center;
+}

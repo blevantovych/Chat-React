@@ -17,7 +17,7 @@ export default class TabsExampleControlled extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 'a',
+      value: 'b',
     };
   }
 

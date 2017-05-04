@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
+import UserList from './UserList'
+import MessageList from './MessageList'
+
 
 class Chat extends Component {
 
@@ -18,11 +21,21 @@ class Chat extends Component {
           defaultValue={this.state.messageText}
           onChange={(e) => this.setState({messageText: e.target.value})}
         />
+
          <RaisedButton label="Send"
           primary={true}
           onClick={() => this.props.onSendClick(this.state.messageText)}
         />
 
+        <div class="container">
+          {/*<UserList
+            users={this.props.users}
+          />*/}
+
+          <MessageList
+              messages={this.props.messages.reverse()}
+          />
+          </div>
       </div>
     );
   }

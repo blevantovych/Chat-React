@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import UserList from './UserList'
 
 import Header from './Header'
-import MessageList from './MessageList'
+
 import './main.scss'
 import './reset.scss'
 
@@ -13,6 +12,8 @@ import Chat from './Chat'
 import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
+
+import Profile from './Profile'
 
 import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL } from '../API_URLS'
 
@@ -25,13 +26,14 @@ class App extends Component {
             filterUsersBy: '',
             users: [],
             logged: false,
-            socket: null
+            socket: null,
+            view: 'profile' // ['profile', 'login/signup', 'chat']
         }
     }
 
     logout = () => {
         console.log('loggin out')
-        this.setState({logged: false})
+        this.setState({logged: false, view: 'login'})
         this.state.socket.disconnect()
     }
 
@@ -49,6 +51,7 @@ class App extends Component {
             mode: 'cors',
             body: JSON.stringify({ username, password })
         }
+        
         fetch(LOGIN_URL, myInit)
             .then(res => res.json())
             .then(({
@@ -56,15 +59,21 @@ class App extends Component {
             }) => {
                 console.log(token)
                 this.boom(token)
-                this.setState({logged: true})
+                this.setState({logged: true, view: 'chat'})
             })
+    }
+
+    onHeaderClick = () => {
+        if (this.state.logged)
+            this.setState({view: 'chat'})
     }
 
     signup = (username, email, password) => {
         console.log(`trying to sign up with
                       username: ${username}
                       password: ${password}
-                      email: ${email}`)
+                      email: ${email}
+                      `)
             
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
@@ -78,14 +87,17 @@ class App extends Component {
         fetch(SIGNUP_URL, myInit)
             .then(res => console.log(res))
             .then((res) => {
-                // console.log(res)
                 this.login(username, password)
-                // this.setState({logged: true})
             })
+    }
+
+    switchToProfile = () => {
+        this.setState({view: 'profile'})
     }
 
     sendMessage = (text) => {
         this.state.socket.emit('message', text)
+        this.getMessages()
     } 
 
     boom (token) {
@@ -98,14 +110,17 @@ class App extends Component {
         })
 
         const log = console.log.bind(console)
-        socket.on('message', log)
+        socket.on('message', () => {
+            this.getMessages()
+        })
 
-        socket.on('join',log)
+        socket.on('join', (who) => {
+            console.log(`${who.user.username} joined! ◕‿◕`);
+        })
 
-        socket.on('leave',log)
-        // setTimeout(() => {
-            // socket.emit('message', 'good morning')
-        // }, 1000)
+        socket.on('leave', (who) => {
+            console.log(`${who.user.username} has leaved ◕︵◕ `);
+        })
 
     }
     
@@ -137,38 +152,34 @@ class App extends Component {
 
     render() {
 
-        const mainContent = this.state.logged ?
-                                    <Chat onSendClick={this.sendMessage}/> :
-                                <Tabs onLoginClick={this.login} onSignupClick={this.signup} />
+        let mainContent;
+        switch (this.state.view) {
+            case 'chat':
+                mainContent = <Chat
+                  onSendClick={this.sendMessage}
+                  users={this.state.users}
+                  messages={this.state.messages}
+                 />
+                break;
+
+            case 'profile':
+                mainContent = <Profile />
+                break;
+
+            case 'login':
+                mainContent = <Tabs onLoginClick={this.login} onSignupClick={this.signup} />
+                break;
+
+            default:
+                break;
+        }
+
         return (
             <MuiThemeProvider>
                 <div>
-                    <Header logged={this.state.logged} onLogoutClick={this.logout} />
+                    <Header onChatTextClick={this.onHeaderClick} logged={this.state.logged} onLogoutClick={this.logout} onProfileClick={this.switchToProfile} />
                     {mainContent}
-                    {/*<HelloWorld />
-                    <Header />
-                    <div class="container">
-                        <UserList users={this.state.users
-                                            .filter(u => !!u.username)
-                                            .filter(u => u.username.includes(this.state.filterUsersBy))
-                                            .map(u => {
-                                                const start = u.username.indexOf(this.state.filterUsersBy)
-                                                const end = start + this.state.filterUsersBy.length
-                                                const subStringToHightLight = u.username.substring(start, end)
-                                                return (<div>
-                                                            {u.username.slice(0, start)}
-                                                            <span class="highlight">{subStringToHightLight}</span>
-                                                            {u.username.slice(end)}
-                                                         </div>
-                                                        )
-                                            })}
-                            onInputChange={this.changeUserListFilter.bind(this)}
-                        />
-
-                        <MessageList
-                            messages={this.state.messages}
-                        />
-                    </div>*/}
+                   
                 </div>
             </MuiThemeProvider>
         )

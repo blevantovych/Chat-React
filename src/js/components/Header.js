@@ -15,8 +15,8 @@ const Menu = (props) => (
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
     >
-        <MenuItem primaryText="Login" onTouchTap={() => console.log('Login')} />
-        <MenuItem primaryText="Profile" onTouchTap={() => console.log('Profile')} />
+        <MenuItem primaryText="Logout" onTouchTap={props.onLogoutClick} />
+        <MenuItem primaryText="Profile" onTouchTap={props.onProfileClick} />
     </IconMenu>
 );
 
@@ -25,15 +25,18 @@ class Header extends Component {
 
     render() {
 
-        const logoutButton = this.props.logged ?
-            <FlatButton onTouchTap={this.props.onLogoutClick}  label="Logout" />
+        const menu = this.props.logged ?
+            // <FlatButton onTouchTap={this.props.onLogoutClick}  label="Logout" />
+            <Menu onProfileClick={this.props.onProfileClick} onLogoutClick={this.props.onLogoutClick} />
             : null
         return (
             <div>
                 <AppBar
                     title={this.props.title || 'CHAT'}
+                    titleStyle={{cursor: 'pointer'}}
                     showMenuIconButton={false}
-                    iconElementRight={logoutButton}
+                    iconElementRight={menu}
+                    onTitleTouchTap={this.props.onChatTextClick}
                 />
             </div>
         );
