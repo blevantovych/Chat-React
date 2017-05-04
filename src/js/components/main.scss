@@ -19,3 +19,18 @@
     // font-size: 1.05em !important;
 }
 
+.container-messagelist-userlist {
+    display: flex;
+}
+
+.message-list {
+    width: 60%;
+    overflow-y: scroll;
+    height: 80vh;
+}
+
+.user-list {
+    width: 40%;
+    overflow-y: scroll;
+    height: 80vh;
+}

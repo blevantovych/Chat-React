@@ -15,7 +15,7 @@ class Profile extends Component {
             <div class="profile-wrapper">
                 {/*This is user profile*/}
                 <div class="image-upload">
-                    <ImagePicker />
+                    <ImagePicker uploadImageToServer={this.props.uploadImageToServer} image={this.props.image} />
                 </div>
                 <div class="user-info">
                     <Card>

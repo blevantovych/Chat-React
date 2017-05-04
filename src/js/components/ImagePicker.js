@@ -30,6 +30,7 @@ export default class ImagePicker extends React.Component {
     reader.onload = () => {
         this.setState({open: true})
         var dataURL = reader.result;
+
         var output = document.getElementById('output');
         output.src = dataURL;
 
@@ -50,6 +51,7 @@ export default class ImagePicker extends React.Component {
         let re = document.querySelector('.profile-image')
         re.style.width = '100px'
         re.src = base64
+        this.props.uploadImageToServer(base64)
     })
     this.setState({open: false})
   }
@@ -68,7 +70,7 @@ export default class ImagePicker extends React.Component {
     return (
       <div>
         <div class="image-upload">
-          <img class="profile-image" src="http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png" alt=""/>
+          <img class="profile-image" src={this.props.image} alt=""/>
           <RaisedButton
               containerElement="label"
               label="new image"

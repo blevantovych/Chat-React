@@ -27,10 +27,10 @@ class Chat extends Component {
           onClick={() => this.props.onSendClick(this.state.messageText)}
         />
 
-        <div class="container">
-          {/*<UserList
+        <div class="container-messagelist-userlist">
+          <UserList
             users={this.props.users}
-          />*/}
+          />
 
           <MessageList
               messages={this.props.messages.reverse()}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import { TextField, RaisedButton } from 'material-ui';
 
 import Header from './Header'
 
@@ -15,7 +16,7 @@ import Tabs from './Tabs'
 
 import Profile from './Profile'
 
-import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL } from '../API_URLS'
+import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL, UPLOAD_IMAGE_URL } from '../API_URLS'
 
 class App extends Component {
     
@@ -25,9 +26,11 @@ class App extends Component {
             messages: [],
             filterUsersBy: '',
             users: [],
+            currentUser: '',
             logged: false,
             socket: null,
-            view: 'profile' // ['profile', 'login/signup', 'chat']
+            image: '',
+            view: 'login' // ['profile', 'login', 'chat']
         }
     }
 
@@ -57,9 +60,11 @@ class App extends Component {
             .then(({
                 token
             }) => {
-                console.log(token)
+                // console.log(token)
                 this.boom(token)
-                this.setState({logged: true, view: 'chat'})
+                this.setState({logged: true, view: 'chat', currentUser: username})
+                this.getUsers()
+                this.getMessages()
             })
     }
 
@@ -109,7 +114,6 @@ class App extends Component {
             socket.emit('authenticate', { token })
         })
 
-        const log = console.log.bind(console)
         socket.on('message', () => {
             this.getMessages()
         })
@@ -124,10 +128,28 @@ class App extends Component {
 
     }
     
-    componentDidMount() {
-        this.getUsers()
-        this.getMessages()
+    uploadImageToServer = (base64) => {
+        let myHeaders = new Headers()
+        myHeaders.set('Content-Type', 'application/json') 
+
+        let myInit = {
+            method: 'post',
+            headers: myHeaders,
+            mode: 'cors',
+            body: JSON.stringify({ username: this.state.currentUser, fileContent: base64 })
+        }
+        
+        fetch(UPLOAD_IMAGE_URL, myInit)
+            .then(res => res.json())
+            .then(r => {
+                console.log(r)
+            })
     }
+
+        // this.getUsers()
+        // this.getMessages()
+    // componentDidMount() {
+    // }
     
     componentWillMount() {
         injectTapEventPlugin()
@@ -142,7 +164,13 @@ class App extends Component {
     getUsers = () => {
         fetch(USERS_URL)
             .then(res => res.json())
-            .then(res => this.setState({users: res.filter(u => !!u.username)}))
+            .then(res => {
+                let users = res.filter(u => !!u.username);
+                this.setState({ 
+                    users,
+                    image: users.filter(u => u.username === this.state.currentUser)[0].fileContent
+                })
+            })
     }
 
     changeUserListFilter (filterUsersBy) {
@@ -163,7 +191,9 @@ class App extends Component {
                 break;
 
             case 'profile':
-                mainContent = <Profile />
+                mainContent = <Profile
+                    uploadImageToServer={this.uploadImageToServer}
+                    image={this.state.image} />
                 break;
 
             case 'login':
@@ -177,7 +207,17 @@ class App extends Component {
         return (
             <MuiThemeProvider>
                 <div>
-                    <Header onChatTextClick={this.onHeaderClick} logged={this.state.logged} onLogoutClick={this.logout} onProfileClick={this.switchToProfile} />
+                    <Header
+                        onChatTextClick={this.onHeaderClick}
+                        logged={this.state.logged}
+                        onLogoutClick={this.logout}
+                        onProfileClick={this.switchToProfile}
+                        userImage={this.state.image}
+                    />
+                    <RaisedButton 
+                        label="Update userlist"
+                        onTouchTap={this.getUsers}
+                    />
                     {mainContent}
                    
                 </div>

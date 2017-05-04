@@ -8,7 +8,7 @@ class MessageList extends PureComponent {
         // console.log(this.props);
         const messageList = this.props.messages.filter(message => typeof message.msg === 'string').map(message => (
             <Card>
-                <Avatar src={`https://randomuser.me/api/portraits/med/women/${Math.round(Math.random()*100)}.jpg`} />
+                <Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />
                 <CardText>
                     {message.msg}
                     <br/>
@@ -19,7 +19,7 @@ class MessageList extends PureComponent {
             </Card>
         ));
         return (
-            <div>
+            <div class="message-list">
                 {messageList}
             </div>
         );

@@ -11,23 +11,8 @@ class Signup extends Component {
             buttonDisabled: false,
             username: '',
             password: '',
-            email: '',
-            file: {
-                content: '',
-                name: ''
-            }
+            email: ''
         }
-    }
-    encodeImageFileAsURL = (element) => {
-        var file = element.files[0];
-        var reader = new FileReader();
-        reader.onloadend = () => {
-            console.log(file);
-            console.log(element);
-            // document.getElementById('image').src = reader.result
-            this.setState({file: {content: reader.result, name: file.name}})
-        }
-        reader.readAsDataURL(file);
     }
 
     render() {
@@ -58,16 +43,10 @@ class Signup extends Component {
                         onChange={(e) => this.setState({password: e.target.value})}
                     />
 
-                    <input
-                        type="file"
-                        ref={(node) => this.fileInput = node}
-                        onChange={() => this.encodeImageFileAsURL(this.fileInput)}
-                    />
-
                     <RaisedButton label="Sign up"
                         primary={true}
                         disabled={this.state.buttonDisabled}
-                        onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password, this.state.file)}
+                        onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password)}
                     />
 
                 </div>

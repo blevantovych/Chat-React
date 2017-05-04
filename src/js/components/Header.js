@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Hamburger from 'material-ui/svg-icons/navigation/menu';
 import FlatButton from 'material-ui/FlatButton';
+import Avatar from 'material-ui/Avatar';
 
 const Menu = (props) => (
     <IconMenu
@@ -27,7 +28,10 @@ class Header extends Component {
 
         const menu = this.props.logged ?
             // <FlatButton onTouchTap={this.props.onLogoutClick}  label="Logout" />
-            <Menu onProfileClick={this.props.onProfileClick} onLogoutClick={this.props.onLogoutClick} />
+            <div>
+                {this.props.userImage && <Avatar src={this.props.userImage} />}
+                <Menu onProfileClick={this.props.onProfileClick} onLogoutClick={this.props.onLogoutClick} />
+            </div>
             : null
         return (
             <div>
