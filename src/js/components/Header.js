@@ -31,8 +31,7 @@ class Header extends Component {
     render() {
 
         const menu = this.props.logged ?
-            // <FlatButton onTouchTap={this.props.onLogoutClick}  label="Logout" />
-            <div style={{width: '150px', justifyContent: 'space-around', display: 'flex', alignItems: 'center'}}>
+            <div style={{minWidth: '150px', justifyContent: 'space-around', display: 'flex', alignItems: 'center'}}>
                 <h4 style={{color: 'white', fontWeight: 'bold', fontSize: '1.2em'}}>{this.props.username}</h4>
                 {this.props.userImage && <Avatar src={this.props.userImage} />}
                 <Menu onProfileClick={this.props.onProfileClick} onLogoutClick={this.props.onLogoutClick} />

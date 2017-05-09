@@ -241,7 +241,7 @@ class App extends Component {
             case 'chat':
                 mainContent = <Chat
                   onSendClick={this.sendMessage}
-                  users={this.state.users}
+                  users={this.state.users.sort((u1, u2) => u1.status === 'on' ? -1 : 1)}
                   messages={this.state.messages}
                  />
                 break;
