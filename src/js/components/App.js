@@ -18,6 +18,40 @@ import Profile from './Profile'
 
 import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL, UPLOAD_IMAGE_URL } from '../API_URLS'
 
+function roughSizeOfObject( object ) {
+
+    var objectList = [];
+    var stack = [ object ];
+    var bytes = 0;
+
+    while ( stack.length ) {
+        var value = stack.pop();
+
+        if ( typeof value === 'boolean' ) {
+            bytes += 4;
+        }
+        else if ( typeof value === 'string' ) {
+            bytes += value.length * 2;
+        }
+        else if ( typeof value === 'number' ) {
+            bytes += 8;
+        }
+        else if
+        (
+            typeof value === 'object'
+            && objectList.indexOf( value ) === -1
+        )
+        {
+            objectList.push( value );
+
+            for( var i in value ) {
+                stack.push( value[ i ] );
+            }
+        }
+    }
+    return bytes;
+}
+
 class App extends Component {
     
     constructor(props) {
@@ -160,7 +194,9 @@ class App extends Component {
             mode: 'cors',
             body: JSON.stringify({ username: this.state.currentUser, fileContent: base64 })
         }
-        
+        this.setState({image: base64})
+        let cu = this.state.users.find(u => u.username === this.state.currentUser)
+        cu.fileContent = base64
         fetch(UPLOAD_IMAGE_URL, myInit)
             .then(res => res.json())
             .then(r => {
@@ -175,7 +211,10 @@ class App extends Component {
     getMessages = () => {
         fetch(MESSAGES_URL)
             .then(res => res.json())
-            .then(res => this.setState({messages: res.filter(m => typeof m.msg === 'string')}))
+            .then(res => {
+                console.log(roughSizeOfObject( res ))
+                this.setState({messages: res.filter(m => typeof m.msg === 'string')})
+            })
     }
 
     getUsers = () => {
@@ -230,6 +269,7 @@ class App extends Component {
                         onLogoutClick={this.logout}
                         onProfileClick={this.switchToProfile}
                         userImage={this.state.image}
+                        username={this.state.currentUser}
                     />
                     <RaisedButton 
                         label="Update userlist"

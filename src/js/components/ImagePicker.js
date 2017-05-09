@@ -1,38 +1,35 @@
-import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
-/**
- * Dialogs can be nested. This example opens a Date Picker from within a Dialog.
- */
 export default class ImagePicker extends React.Component {
   state = {
     open: false,
-  };
+  }
 
-  res = null;
+  res = null
 
-  handleOpen = () => {
-    this.setState({open: true});
-  };
+  openDialog = () => {
+    this.setState({open: true})
+  }
 
-  handleClose = () => {
-    this.setState({open: false});
-  };
+  closeDialog = () => {
+    this.setState({open: false})
+  }
 
   onFileUploaded = (event) => {
-    // console.log(event);
-    console.log('file uploaded');
-    var input = event.target;
+    // console.log(event)
+    console.log('file uploaded')
+    var input = event.target
 
-    var reader = new FileReader();
+    var reader = new FileReader()
     reader.onload = () => {
-        this.setState({open: true})
-        var dataURL = reader.result;
+        this.openDialog()
+        var dataURL = reader.result
 
-        var output = document.getElementById('output');
-        output.src = dataURL;
+        var output = document.getElementById('output')
+        output.src = dataURL
 
         this.res = $('#output').croppie({
           viewport: { width: 100, height: 100, type: 'circle' },
@@ -40,10 +37,10 @@ export default class ImagePicker extends React.Component {
               width: 300,
               height: 300
           }
-        });
+        })
 
-    };
-    reader.readAsDataURL(input.files[0]);
+    }
+    reader.readAsDataURL(input.files[0])
   }
 
   handleProfileImage = () => {
@@ -53,7 +50,7 @@ export default class ImagePicker extends React.Component {
         re.src = base64
         this.props.uploadImageToServer(base64)
     })
-    this.setState({open: false})
+    this.closeDialog()
   }
 
   render() {
@@ -69,9 +66,9 @@ export default class ImagePicker extends React.Component {
         id="btn-cancel"
         label="Cancel"
         primary={true}
-        onTouchTap={() => this.setState({open: false})}
+        onTouchTap={this.closeDialog}
       />
-    ];  
+    ]  
 
     return (
       <div>
@@ -95,6 +92,6 @@ export default class ImagePicker extends React.Component {
           <img id="output" src="" alt=""/>
         </Dialog>
       </div>
-    );
+    )
   }
 }
