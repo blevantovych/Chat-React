@@ -4,8 +4,7 @@ import Avatar from 'material-ui/Avatar';
 
 class MessageList extends PureComponent {
     render() {
-        console.log(this.props.messages);
-        // console.log(this.props);
+        console.log('MessageList rerenders');
         const messageList = this.props.messages.map(message => (
             <Card>
                 <CardText style={{padding: '10px'}}>

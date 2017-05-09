@@ -9,16 +9,12 @@ import Badge from 'material-ui/Badge';
 import { Card } from 'material-ui';
 import TextField from 'material-ui/TextField';
 
-
 class UserList extends PureComponent {
+
     constructor(props) {
         super(props);
-
     }
 
-     //primaryText={user.username}
-                //leftAvatar={<Avatar src={`https://randomuser.me/api/portraits/med/women/${Math.round(Math.random()*99)}.jpg`} />}
-//                rightIcon={<CommunicationChatBubble />}
     renderImage = (user) => {
         if (user.status == 'on')
             return <Badge
@@ -29,7 +25,7 @@ class UserList extends PureComponent {
     }
 
     render() {
-        console.log(this.props);
+        console.log('Userlist rerender');
 
         const userList = this.props.users.map(user => (
             <ListItem>

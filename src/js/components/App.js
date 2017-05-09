@@ -136,8 +136,6 @@ class App extends Component {
 
     sendMessage = (text) => {
         this.state.socket.emit('message', text)
-
-        // this.getMessages()
     } 
 
     boom (token) {
@@ -150,21 +148,15 @@ class App extends Component {
         })
 
         socket.on('message', (mes) => {
-            // console.log('New message: ', mes);
-            console.log('State before: \n');
-            console.log(this.state.messages);
-            // this.setState({messages: this.state.messages.concat(mes)})
             let messages = [...this.state.messages, mes]
             this.setState({messages})
-
-            console.log('\nState After: \n');
-            console.log(this.state.messages);
-            // this.getMessages()
         })
 
         socket.on('join', (who) => {
-            // find that user in this.state.users 
-            // update its status
+
+            if (!this.state.users.find(u => u.username === who.user.username)) {
+                this.setState({users: [...this.state.users, who.user]})
+            }
 
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.user.username) {
@@ -172,12 +164,12 @@ class App extends Component {
                 }
                 return u;
             })
+            
             console.log(`${who.user.username} joined! ◕‿◕`);
             this.setState({users: updatedUsers})
         })
 
         socket.on('leave', (who) => {
-            console.log(this.state.users);
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.user.username) {
                     u.status = 'off'
@@ -186,6 +178,18 @@ class App extends Component {
             })
             console.log(`${who.user.username} has leaved ◕︵◕ `);
             this.setState({users: updatedUsers})
+        })
+
+        socket.on('imageChanged', (who) => {
+            console.log(`${who.username} has changed his/her profile image`);
+            let indexOfUser = this.state.users.findIndex(u => u.username === who.username)
+            let updatedUsers  = [...this.state.users]
+            updatedUsers.splice(indexOfUser, 1)
+
+            let userWhoChangedImage = this.state.users.find(u => u.username === who.username)
+            userWhoChangedImage.fileContent = who.image
+            
+            this.setState({users: updatedUsers.concat(userWhoChangedImage)})
         })
     }
     
@@ -202,6 +206,10 @@ class App extends Component {
         this.setState({image: base64})
         let cu = this.state.users.find(u => u.username === this.state.currentUser)
         cu.fileContent = base64
+        this.state.socket.emit('imageChanged', {
+            username: this.state.currentUser,
+            image: base64
+        })
         fetch(UPLOAD_IMAGE_URL, myInit)
             .then(res => res.json())
             .then(r => {
