@@ -102,7 +102,8 @@ class App extends Component {
 
     sendMessage = (text) => {
         this.state.socket.emit('message', text)
-        this.getMessages()
+
+        // this.getMessages()
     } 
 
     boom (token) {
@@ -114,18 +115,39 @@ class App extends Component {
             socket.emit('authenticate', { token })
         })
 
-        socket.on('message', () => {
-            this.getMessages()
+        socket.on('message', (mes) => {
+            console.log('New message: ', mes);
+
+            this.setState({messages: this.state.messages.concat(mes)})
+            // this.getMessages()
         })
 
         socket.on('join', (who) => {
+            // find that user in this.state.users 
+            // update its status
+            console.log(this.state.users);
+
+            let updatedUsers = this.state.users.map(u => {
+                if (u.username === who.user.username) {
+                    u.status = 'on'
+                }
+                return u;
+            })
             console.log(`${who.user.username} joined! ◕‿◕`);
+            this.setState({users: updatedUsers})
         })
 
         socket.on('leave', (who) => {
+            console.log(this.state.users);
+            let updatedUsers = this.state.users.map(u => {
+                if (u.username === who.user.username) {
+                    u.status = 'off'
+                }
+                return u;
+            })
             console.log(`${who.user.username} has leaved ◕︵◕ `);
+            this.setState({users: updatedUsers})
         })
-
     }
     
     uploadImageToServer = (base64) => {
@@ -146,11 +168,6 @@ class App extends Component {
             })
     }
 
-        // this.getUsers()
-        // this.getMessages()
-    // componentDidMount() {
-    // }
-    
     componentWillMount() {
         injectTapEventPlugin()
     }

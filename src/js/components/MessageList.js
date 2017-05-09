@@ -6,10 +6,10 @@ class MessageList extends PureComponent {
     render() {
         console.log(this.props.messages);
         // console.log(this.props);
-        const messageList = this.props.messages.filter(message => typeof message.msg === 'string').map(message => (
+        const messageList = this.props.messages.map(message => (
             <Card>
-                <Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />
-                <CardText>
+                <CardText style={{padding: '10px'}}>
+                    <Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />
                     {message.msg}
                     <br/>
                     {(new Date(message.time)).toLocaleString()}

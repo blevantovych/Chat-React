@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 import UserList from './UserList'
 import MessageList from './MessageList'
 
 
-class Chat extends Component {
+class Chat extends PureComponent {
 
   constructor(props) {
     super(props);

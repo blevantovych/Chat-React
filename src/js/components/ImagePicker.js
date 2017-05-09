@@ -59,18 +59,24 @@ export default class ImagePicker extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        id="btn"
+        id="btn-ok"
         label="Ok"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleProfileImage}
       />,
-    ];
+      <FlatButton
+        id="btn-cancel"
+        label="Cancel"
+        primary={true}
+        onTouchTap={() => this.setState({open: false})}
+      />
+    ];  
 
     return (
       <div>
         <div class="image-upload">
-          <img class="profile-image" src={this.props.image} alt=""/>
+          <img class="profile-image" src={this.props.image} alt="profile-image" />
           <RaisedButton
               containerElement="label"
               label="new image"

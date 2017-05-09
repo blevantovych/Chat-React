@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -10,7 +10,7 @@ import { Card } from 'material-ui';
 import TextField from 'material-ui/TextField';
 
 
-class UserList extends Component {
+class UserList extends PureComponent {
     constructor(props) {
         super(props);
 
