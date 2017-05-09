@@ -155,6 +155,7 @@ class App extends Component {
         socket.on('join', (who) => {
 
             if (!this.state.users.find(u => u.username === who.user.username)) {
+                console.log(`I should see this image only if new user registers`);
                 this.setState({users: [...this.state.users, who.user]})
             }
 

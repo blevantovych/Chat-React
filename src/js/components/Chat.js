@@ -6,25 +6,20 @@ import MessageList from './MessageList'
 
 class Chat extends PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      messageText: ''
-    }
-  }
-  
+  messageText = ""
+
   render() {
     return (
       <div style={{margin: 'auto'}}>
         <TextField
           type="text"
-          defaultValue={this.state.messageText}
-          onChange={(e) => this.setState({messageText: e.target.value})}
+          defaultValue={this.messageText}
+          onChange={(e) => this.messageText = e.target.value}
         />
 
          <RaisedButton label="Send"
           primary={true}
-          onClick={() => this.props.onSendClick(this.state.messageText)}
+          onClick={() => this.props.onSendClick(this.messageText)}
         />
 
         <div class="container-messagelist-userlist">
@@ -35,7 +30,7 @@ class Chat extends PureComponent {
           <MessageList
               messages={[...this.props.messages].reverse()}
           />
-          </div>
+        </div>
       </div>
     );
   }
