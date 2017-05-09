@@ -150,16 +150,21 @@ class App extends Component {
         })
 
         socket.on('message', (mes) => {
-            console.log('New message: ', mes);
+            // console.log('New message: ', mes);
+            console.log('State before: \n');
+            console.log(this.state.messages);
+            // this.setState({messages: this.state.messages.concat(mes)})
+            let messages = [...this.state.messages, mes]
+            this.setState({messages})
 
-            this.setState({messages: this.state.messages.concat(mes)})
+            console.log('\nState After: \n');
+            console.log(this.state.messages);
             // this.getMessages()
         })
 
         socket.on('join', (who) => {
             // find that user in this.state.users 
             // update its status
-            console.log(this.state.users);
 
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.user.username) {

@@ -33,7 +33,7 @@ class Chat extends PureComponent {
           />
 
           <MessageList
-              messages={this.props.messages.reverse()}
+              messages={[...this.props.messages].reverse()}
           />
           </div>
       </div>
