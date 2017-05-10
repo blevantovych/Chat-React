@@ -48,7 +48,16 @@ export default class ImagePicker extends React.Component {
         let re = document.querySelector('.profile-image')
         re.style.width = '100px'
         re.src = base64
-        this.props.uploadImageToServer(base64)
+        re.onload = () => {
+          let canvas = document.createElement('canvas');
+          let ctx = canvas.getContext('2d');
+          canvas.width = 200
+          canvas.height = 200
+          ctx.imageSmoothingEnabled = true
+          ctx.drawImage(re, 0, 0, 200, 200)
+          this.props.uploadImageToServer(canvas.toDataURL())
+        }
+        // this.props.uploadImageToServer(base64)
     })
     this.closeDialog()
   }

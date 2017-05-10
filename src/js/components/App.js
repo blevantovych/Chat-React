@@ -96,9 +96,17 @@ class App extends Component {
             }) => {
                 // console.log(token)
                 this.boom(token)
-                this.setState({logged: true, view: 'chat', currentUser: username})
-                this.getUsers()
-                this.getMessages()
+                Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
+                    this.setState({
+                        logged: true,
+                        view: 'chat',
+                        currentUser: username,
+                        users: res[0],
+                        messages: res[1],
+                        image: res[0].filter(u => u.username === username)[0].fileContent
+                    })
+                })
+                
             })
     }
 
@@ -223,24 +231,15 @@ class App extends Component {
     }
     
     getMessages = () => {
-        fetch(MESSAGES_URL)
+        return fetch(MESSAGES_URL)
             .then(res => res.json())
-            .then(res => {
-                console.log(roughSizeOfObject( res ))
-                this.setState({messages: res.filter(m => typeof m.msg === 'string')})
-            })
+            .then(res => res.filter(m => typeof m.msg === 'string'))
     }
 
     getUsers = () => {
-        fetch(USERS_URL)
+        return fetch(USERS_URL)
             .then(res => res.json())
-            .then(res => {
-                let users = res.filter(u => !!u.username);
-                this.setState({ 
-                    users,
-                    image: users.filter(u => u.username === this.state.currentUser)[0].fileContent
-                })
-            })
+            .then(res => res.filter(u => !!u.username))
     }
 
     changeUserListFilter (filterUsersBy) {

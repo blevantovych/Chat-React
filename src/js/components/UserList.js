@@ -33,7 +33,6 @@ class UserList extends PureComponent {
                     <div style={{padding: '20px', display: 'flex', alignItems: 'center'}}>
                         {this.renderImage(user)}
                         <h4>{user.username}</h4>
-                        <h4>{user.status === 'on' ? 'online' : 'offline'}</h4>
                     </div>
                 </Card>
                
