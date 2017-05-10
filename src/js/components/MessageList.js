@@ -8,12 +8,13 @@ class MessageList extends PureComponent {
         const messageList = this.props.messages.map(message => (
             <Card>
                 <CardText style={{padding: '10px'}}>
-                    <Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />
+                    {/*<Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />*/}
+                    <Avatar src={this.props.usersImages[message.username]} />
                     {message.msg}
                     <br/>
                     {(new Date(message.time)).toLocaleString()}
                     <br/>
-                    {message.user.username}
+                    {message.username}
                 </CardText>
             </Card>
         ));

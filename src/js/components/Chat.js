@@ -9,6 +9,10 @@ class Chat extends PureComponent {
   messageText = ""
 
   render() {
+    const userImages = this.props.users.reduce((res, user) => {
+      res[user.username] = user.fileContent
+      return res
+    }, {})
     return (
       <div style={{margin: 'auto'}}>
         <TextField
@@ -24,11 +28,12 @@ class Chat extends PureComponent {
 
         <div class="container-messagelist-userlist">
           <UserList
-            users={this.props.users}
+            users={this.props.users.sort((u1, u2) => u1.status === 'on' ? -1 : 1)}
           />
 
           <MessageList
               messages={[...this.props.messages].reverse()}
+              usersImages={userImages}
           />
         </div>
       </div>
