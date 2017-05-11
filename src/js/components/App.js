@@ -16,6 +16,7 @@ import Tabs from './Tabs'
 
 import Profile from './Profile'
 
+
 import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL, UPLOAD_IMAGE_URL } from '../API_URLS'
 
 function roughSizeOfObject( object ) {
@@ -283,10 +284,6 @@ class App extends Component {
                         onProfileClick={this.switchToProfile}
                         userImage={this.state.image}
                         username={this.state.currentUser}
-                    />
-                    <RaisedButton 
-                        label="Update userlist"
-                        onTouchTap={this.getUsers}
                     />
                     {mainContent}
                    
