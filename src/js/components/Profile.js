@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { TextField, RaisedButton, Card, CardText } from 'material-ui'
+import DatePicker from 'material-ui/DatePicker';
+
+// import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 
 import ImagePicker from './ImagePicker'
 import './profile.scss'
@@ -19,9 +22,34 @@ class Profile extends Component {
                 </div>
                 <div class="user-info">
                     <Card>
-                        <CardText>
-                            Lorem ipsum dolor sit amet, condsfkjlsdfjssectetur adipisicing elit. Temporibus, maiores.
-                        </CardText>
+                        
+                        <div class="profile__item--change">
+                            <h1>Username: </h1>
+                            <TextField
+                                type="text"
+                                defaultValue={"Maria"}
+                                onChange={(e) => console.log(e.target.value)}
+                            />
+                        </div>
+
+                        <div class="profile__item--change">
+                            <h1>Email: </h1>
+                            <TextField
+                                type="text"
+                                defaultValue={"levantovychmaria@gmail.com"}
+                                onChange={(e) => console.log(e.target.value)}
+                            />
+                        </div>
+
+                        <div class="profile__item--change">
+                            <h1>Birthdate: </h1>
+                            <DatePicker hintText="Choose date" />
+                        </div>
+
+                        <RaisedButton label="Save"
+                            primary={true}
+                            onClick={() => console.log('saving')}
+                        />
                     </Card>
                 </div>
                 {/*<ImagePicker />*/}
