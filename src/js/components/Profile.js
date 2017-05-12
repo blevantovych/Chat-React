@@ -12,13 +12,15 @@ class Profile extends Component {
     constructor(props) {
         super(props);
     }
-
+    username = this.props.user.username
+    email = this.props.user.email
+    bday = this.props.user.bday
     render() {
         return (
             <div class="profile-wrapper">
                 {/*This is user profile*/}
                 <div class="image-upload">
-                    <ImagePicker uploadImageToServer={this.props.uploadImageToServer} image={this.props.image} />
+                    <ImagePicker uploadImageToServer={this.props.uploadImageToServer} image={this.props.user.fileContent} />
                 </div>
                 <div class="user-info">
                     <Card>
@@ -27,8 +29,8 @@ class Profile extends Component {
                             <h1>Username: </h1>
                             <TextField
                                 type="text"
-                                defaultValue={"Maria"}
-                                onChange={(e) => console.log(e.target.value)}
+                                defaultValue={this.username}
+                                onChange={(e) => this.username = e.target.value}
                             />
                         </div>
 
@@ -36,19 +38,23 @@ class Profile extends Component {
                             <h1>Email: </h1>
                             <TextField
                                 type="text"
-                                defaultValue={"levantovychmaria@gmail.com"}
-                                onChange={(e) => console.log(e.target.value)}
+                                defaultValue={this.email}
+                                onChange={(e) => this.email = e.target.value}
                             />
                         </div>
 
                         <div class="profile__item--change">
                             <h1>Birthdate: </h1>
-                            <DatePicker hintText="Choose date" />
+                            <DatePicker
+                                hintText="Choose date"
+                                defaultDate={this.bday ? new Date(this.bday) : undefined}
+                                onChange={(_, date) => this.bday = date.valueOf()}
+                            />
                         </div>
 
                         <RaisedButton label="Save"
                             primary={true}
-                            onClick={() => console.log('saving')}
+                            onClick={() => this.props.updateUserInfo(this.username, this.bday, this.email)}
                         />
                     </Card>
                 </div>

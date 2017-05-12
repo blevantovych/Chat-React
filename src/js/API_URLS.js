@@ -12,6 +12,7 @@ export const USERS_URL          = `http://localhost:${port}/users`
 export const MESSAGES_URL       = `http://localhost:${port}/messages`
 export const SOCKET_URL         = `http://localhost:${port}`
 export const UPLOAD_IMAGE_URL   = `http://localhost:${port}/image`
+export const CHANGE_INFO_URL    = `http://localhost:${port}/info`
 
 // heroku
 

@@ -2,56 +2,22 @@ import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { TextField, RaisedButton } from 'material-ui';
-
 import Header from './Header'
-
 import './main.scss'
 import './reset.scss'
-
 import Chat from './Chat'
-
 import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
-
 import Profile from './Profile'
-
-
-import { SIGNUP_URL, LOGIN_URL, SOCKET_URL, MESSAGES_URL, USERS_URL, UPLOAD_IMAGE_URL } from '../API_URLS'
-
-function roughSizeOfObject( object ) {
-
-    var objectList = [];
-    var stack = [ object ];
-    var bytes = 0;
-
-    while ( stack.length ) {
-        var value = stack.pop();
-
-        if ( typeof value === 'boolean' ) {
-            bytes += 4;
-        }
-        else if ( typeof value === 'string' ) {
-            bytes += value.length * 2;
-        }
-        else if ( typeof value === 'number' ) {
-            bytes += 8;
-        }
-        else if
-        (
-            typeof value === 'object'
-            && objectList.indexOf( value ) === -1
-        )
-        {
-            objectList.push( value );
-
-            for( var i in value ) {
-                stack.push( value[ i ] );
-            }
-        }
-    }
-    return bytes;
-}
+import {
+    SIGNUP_URL,
+    LOGIN_URL,
+    SOCKET_URL,
+    MESSAGES_URL,
+    USERS_URL,
+    UPLOAD_IMAGE_URL,
+    CHANGE_INFO_URL } from '../API_URLS'
 
 class App extends Component {
     
@@ -61,17 +27,20 @@ class App extends Component {
             messages: [],
             filterUsersBy: '',
             users: [],
-            currentUser: '',
             logged: false,
+            user: {
+                username: '',
+            },
             socket: null,
-            image: '',
             view: 'login' // ['profile', 'login', 'chat']
+
         }
     }
 
     logout = () => {
         console.log('loggin out')
         this.setState({logged: false, view: 'login'})
+        this.state.socket.emit('leave', {username: this.state.user.username})
         this.state.socket.disconnect()
     }
 
@@ -101,10 +70,9 @@ class App extends Component {
                     this.setState({
                         logged: true,
                         view: 'chat',
-                        currentUser: username,
                         users: res[0],
                         messages: res[1],
-                        image: res[0].filter(u => u.username === username)[0].fileContent
+                        user: res[0].filter(u => u.username === username)[0]
                     })
                 })
                 
@@ -134,7 +102,7 @@ class App extends Component {
         }
         fetch(SIGNUP_URL, myInit)
             .then(res => console.log(res))
-            .then((res) => {
+            .then(res => {
                 this.login(username, password)
             })
     }
@@ -157,6 +125,7 @@ class App extends Component {
         })
 
         socket.on('message', (mes) => {
+            console.log('new message', mes);
             let messages = [...this.state.messages, mes]
             this.setState({messages})
         })
@@ -180,13 +149,14 @@ class App extends Component {
         })
 
         socket.on('leave', (who) => {
+            console.log(who);
             let updatedUsers = this.state.users.map(u => {
-                if (u.username === who.user.username) {
+                if (u.username === who.username) {
                     u.status = 'off'
                 }
                 return u;
             })
-            console.log(`${who.user.username} has leaved ◕︵◕ `);
+            console.log(`${who.username} has leaved ◕︵◕ `);
             this.setState({users: updatedUsers})
         })
 
@@ -201,6 +171,31 @@ class App extends Component {
             
             this.setState({users: updatedUsers.concat(userWhoChangedImage)})
         })
+
+        socket.on('infoChanged', (who) => {
+            console.log('some change their info');
+            Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
+                console.log('after infochanged users\n',res[0]);
+                // console.log('message\n',res[0]);
+                this.setState({
+                    users: res[0],
+                    messages: res[1]
+                })
+            })
+            // console.log(`${who.username} has changed his/her profile info`);
+            // let indexOfUser = this.state.users.findIndex(u => u.username === who.username)
+            // let updatedUsers  = [...this.state.users]
+            // updatedUsers.splice(indexOfUser, 1)
+
+            // let userWhoChangedInfo = this.state.users.find(u => u.username === who.username)
+
+            // if (who.email) userWhoChangedImage.email = who.email
+            // if (who.bday) userWhoChangedImage.email = who.bday
+            // if (who.username) userWhoChangedImage.email = who.email
+
+            
+            // this.setState({users: updatedUsers.concat(userWhoChangedInfo)})
+        })
     }
     
     uploadImageToServer = (base64) => {
@@ -211,19 +206,60 @@ class App extends Component {
             method: 'post',
             headers: myHeaders,
             mode: 'cors',
-            body: JSON.stringify({ username: this.state.currentUser, fileContent: base64 })
+            body: JSON.stringify({ username: this.state.user.username, fileContent: base64 })
         }
-        this.setState({image: base64})
-        let cu = this.state.users.find(u => u.username === this.state.currentUser)
+        this.setState({user: Object.assign({}, this.state.user, {fileContent: base64})})
+        let cu = this.state.users.find(u => u.username === this.state.user.username)
         cu.fileContent = base64
+
         this.state.socket.emit('imageChanged', {
-            username: this.state.currentUser,
+            username: this.state.user.username,
             image: base64
         })
         fetch(UPLOAD_IMAGE_URL, myInit)
             .then(res => res.json())
             .then(r => {
                 console.log(r)
+            })
+    }
+
+    updateUserInfo = (username, bday, email) => {
+        let myHeaders = new Headers()
+        myHeaders.set('Content-Type', 'application/json') 
+
+        let myInit = {
+            method: 'post',
+            headers: myHeaders,
+            mode: 'cors',
+            body: JSON.stringify({
+                username: this.state.user.username,
+                updatedInfo: {
+                    username,
+                    bday,
+                    email
+                }
+            })
+        }
+
+        this.setState({
+            user: Object.assign({}, this.state.user, {
+                username,
+                bday,
+                email
+            })
+        })
+        
+        fetch(CHANGE_INFO_URL, myInit)
+            .then(res => res.json())
+            .then(r => {
+                this.state.socket.emit('infoChanged', {
+                    username: this.state.user.username,
+                    updatedInfo: {
+                        username,
+                        bday,
+                        email
+                    }
+                })
             })
     }
 
@@ -262,8 +298,10 @@ class App extends Component {
 
             case 'profile':
                 mainContent = <Profile
+                    user={this.state.user}
                     uploadImageToServer={this.uploadImageToServer}
-                    image={this.state.image} />
+                    updateUserInfo={this.updateUserInfo}
+                   />
                 break;
 
             case 'login':
@@ -282,8 +320,8 @@ class App extends Component {
                         logged={this.state.logged}
                         onLogoutClick={this.logout}
                         onProfileClick={this.switchToProfile}
-                        userImage={this.state.image}
-                        username={this.state.currentUser}
+                        userImage={this.state.user && this.state.user.fileContent}
+                        username={this.state.user.username}
                     />
                     {mainContent}
                    
