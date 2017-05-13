@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { formWrapper, formStyles } from './formStyles';
 import { TextField, RaisedButton } from 'material-ui';
 
-
 class Signup extends Component {
 
     constructor(props) {

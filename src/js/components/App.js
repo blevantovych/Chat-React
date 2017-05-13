@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import Snackbar from 'material-ui/Snackbar';
 import { TextField, RaisedButton } from 'material-ui';
 import Header from './Header'
 import './main.scss'
@@ -25,6 +26,7 @@ class App extends Component {
         super(props)
         this.state = {
             messages: [],
+            errorMessage: '',
             users: [],
             logged: false,
             user: {
@@ -32,7 +34,6 @@ class App extends Component {
             },
             socket: null,
             view: 'login' // ['profile', 'login', 'chat']
-
         }
     }
 
@@ -63,6 +64,7 @@ class App extends Component {
             .then(({
                 token
             }) => {
+                this.setState({errorMessage: ''})
                 // console.log(token)
                 this.boom(token)
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
@@ -77,6 +79,8 @@ class App extends Component {
                 
             }).catch(e => {
                 console.log(`error occured in login`);
+                this.setState({errorMessage: 'There is no such user in db'})
+            
                 console.log(e);
             }) 
     }
@@ -310,6 +314,11 @@ class App extends Component {
                         onProfileClick={this.switchToProfile}
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
+                    />
+                    <Snackbar
+                        open={!!this.state.errorMessage}
+                        message={this.state.errorMessage}
+                        autoHideDuration={4000}
                     />
                     {mainContent}
                    
