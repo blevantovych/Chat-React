@@ -11,11 +11,20 @@ class Signup extends Component {
             buttonDisabled: false,
             username: '',
             password: '',
-            email: ''
+            email: '',
+            usernameErr: false,
+            passwordErr: false,
+            emailErr: false,
+            passwordDirty: false,
+            usernameDirty: false,
+            emailDirty: false
         }
     }
 
     render() {
+        let buttonDisabled =
+            (this.state.passwordErr || this.state.usernameErr || this.state.emailErr) ||
+            (!this.state.passwordDirty || !this.state.usernameDirty || !this.state.emailDirty)
         return (
             <div style={formWrapper}>
                 <div class="form" style={formStyles}>
@@ -23,29 +32,50 @@ class Signup extends Component {
                         style={{width: '400px'}}
                         floatingLabelText="Username"
                         type="text"
+                        errorText={this.state.usernameErr && "This field is required."}
                         defaultValue={this.state.username}
-                        onChange={(e) => this.setState({username: e.target.value})}
+                        onChange={(e) => {
+                            this.setState({
+                                usernameErr: !e.target.value,
+                                username: e.target.value,
+                                usernameDirty: true
+                            })
+                        }}
                     />
 
                     <TextField
                         style={{width: '400px'}}
                         floatingLabelText="Email"
                         type="email"
+                        errorText={this.state.emailErr && "This field is required."}
                         defaultValue={this.state.email}
-                        onChange={(e) => this.setState({email: e.target.value})}
+                        onChange={(e) => {
+                            this.setState({
+                                emailErr: !e.target.value,
+                                email: e.target.value,
+                                emailDirty: true
+                            })
+                        }}
                     />
 
                     <TextField
                         style={{width: '400px'}}
                         floatingLabelText="Password"
                         type="password"
+                        errorText={this.state.passwordErr && "This field is required."}
                         defaultValue={this.state.password}
-                        onChange={(e) => this.setState({password: e.target.value})}
+                        onChange={(e) => {
+                            this.setState({
+                                passwordErr: !e.target.value,
+                                password: e.target.value,
+                                passwordDirty: true
+                            })
+                        }}
                     />
 
                     <RaisedButton label="Sign up"
                         primary={true}
-                        disabled={this.state.buttonDisabled}
+                        disabled={buttonDisabled}
                         onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password)}
                     />
 

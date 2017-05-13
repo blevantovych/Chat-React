@@ -10,13 +10,17 @@ class Login extends Component {
         this.state = {
             password: '',
             username: '',
-            buttonDisabled: false,
             usernameErr: false,
             passwordErr: false,
+            passwordDirty: false,
+            usernameDirty: false
         }
     }
 
     render() {
+        let buttonDisabled =
+            (this.state.passwordErr || this.state.usernameErr) ||
+            (!this.state.passwordDirty || !this.state.usernameDirty)
         return (
             <div style={formWrapper}>
                 <div class="form" style={formStyles}>
@@ -29,7 +33,8 @@ class Login extends Component {
                         onChange={(e) => {
                             this.setState({
                                 usernameErr: !e.target.value,
-                                username: e.target.value
+                                username: e.target.value,
+                                usernameDirty: true
                             })
                         }}
                     />
@@ -43,14 +48,15 @@ class Login extends Component {
                         onChange={(e) => {
                             this.setState({
                                 password: e.target.value,
-                                passwordErr: !e.target.value
+                                passwordErr: !e.target.value,
+                                passwordDirty: true
                             })
                         }}
                     />
 
                     <RaisedButton label="Login"
                         primary={true}
-                        disabled={this.state.passwordErr || this.state.usernameErr}
+                        disabled={buttonDisabled}
                         onClick={() => this.props.onLoginClick(this.state.username, this.state.password)}
                     />
                 </div>
