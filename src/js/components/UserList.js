@@ -13,29 +13,29 @@ class UserList extends PureComponent {
 
     constructor(props) {
         super(props);
-    }
-
-    renderImage = (user) => {
-        if (user.status == 'on')
-            return <Badge
-                badgeStyle={{top: 25, right: 25, backgroundColor: 'rgb(66, 183, 42)'}}>
-                {user.fileContent ? <img style={{width: '100px'}} src={user.fileContent} alt=""/> : <img style={{width: '100px'}} src="http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png" alt=""/>}   
-            </Badge>
-        else return <div>{user.fileContent ? <img style={{width: '100px'}} src={user.fileContent} alt=""/> : <img style={{width: '100px'}} src="http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png" alt=""/>}</div>
+        this.state = {
+            filterValue: ''
+        }
     }
 
     render() {
+        let greenCircle = <div style={{
+                width: '10px', height: '10px',
+                backgroundColor: 'rgb(66, 183, 42)',
+                position: 'relative',
+                top: '25%',
+                left: '25%', 
+                borderRadius: '50%'
+            }}></div>
+
         console.log('Userlist rerender');
 
-        const userList = this.props.users.map(user => (
-            <ListItem>
-                <Card>
-                    <div style={{padding: '20px', display: 'flex', alignItems: 'center'}}>
-                        {this.renderImage(user)}
-                        <h4>{user.username}</h4>
-                    </div>
-                </Card>
-               
+        const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map(user => (
+            <ListItem
+                primaryText={user.username}
+                leftAvatar={<Avatar src={user.fileContent} />}
+                rightIcon={user.status == 'on' && <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar>}
+            >
             </ListItem>
         ));
         return (
@@ -45,7 +45,7 @@ class UserList extends PureComponent {
                     <TextField
                         hintText="Search..."
                         style={{width: '50%'}}
-                        onChange={(e) => this.props.onInputChange(e.target.value)}
+                        onChange={(e) => this.setState({filterValue: e.target.value})}
                     />
                 </div>
                 <List>

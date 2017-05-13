@@ -22,4 +22,4 @@ export const CHANGE_INFO_URL    = `http://localhost:${port}/info`
 // export const MESSAGES_URL       = `https://dead-simple-chat.herokuapp.com/messages`
 // export const SOCKET_URL         = `https://dead-simple-chat.herokuapp.com`
 // export const UPLOAD_IMAGE_URL   = `https://dead-simple-chat.herokuapp.com/image`
-// export const CHANGE_INFO_URL   = `https://dead-simple-chat.herokuapp.com/info`
+// export const CHANGE_INFO_URL    = `https://dead-simple-chat.herokuapp.com/info`

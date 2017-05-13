@@ -25,7 +25,6 @@ class App extends Component {
         super(props)
         this.state = {
             messages: [],
-            filterUsersBy: '',
             users: [],
             logged: false,
             user: {
@@ -127,8 +126,8 @@ class App extends Component {
         socket.on('message', (mes) => {
             console.log('new message', mes);
             if (mes.username !== this.state.user.username) {
-                let audio = new Audio('play.mp3');
-                audio.play();
+                let audio = new Audio('play.mp3')
+                audio.play()
             }
             let messages = [...this.state.messages, mes]
             this.setState({messages})
@@ -186,19 +185,6 @@ class App extends Component {
                     messages: res[1]
                 })
             })
-            // console.log(`${who.username} has changed his/her profile info`);
-            // let indexOfUser = this.state.users.findIndex(u => u.username === who.username)
-            // let updatedUsers  = [...this.state.users]
-            // updatedUsers.splice(indexOfUser, 1)
-
-            // let userWhoChangedInfo = this.state.users.find(u => u.username === who.username)
-
-            // if (who.email) userWhoChangedImage.email = who.email
-            // if (who.bday) userWhoChangedImage.email = who.bday
-            // if (who.username) userWhoChangedImage.email = who.email
-
-            
-            // this.setState({users: updatedUsers.concat(userWhoChangedInfo)})
         })
     }
     
@@ -281,11 +267,6 @@ class App extends Component {
         return fetch(USERS_URL)
             .then(res => res.json())
             .then(res => res.filter(u => !!u.username))
-    }
-
-    changeUserListFilter (filterUsersBy) {
-        console.log('changin userlist filter')
-        this.setState({filterUsersBy})
     }
 
     render() {
