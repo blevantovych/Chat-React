@@ -75,7 +75,10 @@ class App extends Component {
                     })
                 })
                 
-            })
+            }).catch(e => {
+                console.log(`error occured in login`);
+                console.log(e);
+            }) 
     }
 
     onHeaderClick = () => {
