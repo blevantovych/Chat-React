@@ -21,7 +21,7 @@ const Menu = (props) => (
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
     >
         <MenuItem primaryText="Profile" rightIcon={<ProfileIcon />} onTouchTap={props.onProfileClick} />
-        <MenuItem primaryText="Logout" rightIcon={<LogoutIcon />} onTouchTap={props.onLogoutClick} />
+        <MenuItem primaryText="Log out" rightIcon={<LogoutIcon />} onTouchTap={props.onLogoutClick} />
     </IconMenu>
 );
 

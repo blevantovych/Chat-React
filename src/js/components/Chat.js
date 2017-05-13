@@ -2,11 +2,9 @@ import React, { Component, PureComponent } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 import UserList from './UserList'
 import MessageList from './MessageList'
-
+import MessageInput from './MessageInput'
 
 class Chat extends PureComponent {
-
-  messageText = ""
 
   render() {
     const userImages = this.props.users.reduce((res, user) => {
@@ -14,27 +12,19 @@ class Chat extends PureComponent {
       return res
     }, {})
     return (
-      <div style={{margin: 'auto'}}>
-        <TextField
-          type="text"
-          defaultValue={this.messageText}
-          onChange={(e) => this.messageText = e.target.value}
-        />
-
-         <RaisedButton label="Send"
-          primary={true}
-          onClick={() => this.props.onSendClick(this.messageText)}
-        />
-
+      <div style={{margin: 'auto', width: '80vw'}}>
         <div class="container-messagelist-userlist">
           <UserList
             users={this.props.users.sort((u1, u2) => u1.status === 'on' ? -1 : 1)}
           />
-
-          <MessageList
-              messages={[...this.props.messages].reverse()}
-              usersImages={userImages}
-          />
+          <div style={{display: 'flex', flexDirection: 'column', width: '65vw'}}>
+            <MessageList
+                messages={[...this.props.messages].reverse()}
+                usersImages={userImages}
+            />
+            
+            <MessageInput onSendClick={this.props.onSendClick} />
+          </div>
         </div>
       </div>
     );

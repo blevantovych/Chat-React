@@ -5,7 +5,7 @@
 // export const SOCKET_URL = 'http://eleksfrontendcamp-mockapitron.rhcloud.com:80'
 
 // for local development
-const port = 3000;
+const port = 5000;
 export const SIGNUP_URL         = `http://localhost:${port}/signup`
 export const LOGIN_URL          = `http://localhost:${port}/login`
 export const USERS_URL          = `http://localhost:${port}/users`
@@ -22,3 +22,4 @@ export const CHANGE_INFO_URL    = `http://localhost:${port}/info`
 // export const MESSAGES_URL       = `https://dead-simple-chat.herokuapp.com/messages`
 // export const SOCKET_URL         = `https://dead-simple-chat.herokuapp.com`
 // export const UPLOAD_IMAGE_URL   = `https://dead-simple-chat.herokuapp.com/image`
+// export const CHANGE_INFO_URL   = `https://dead-simple-chat.herokuapp.com/info`

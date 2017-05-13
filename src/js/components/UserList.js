@@ -41,10 +41,13 @@ class UserList extends PureComponent {
         return (
             <div class="user-list">
                 <br />
-                <TextField
-                    hintText="Search..."
-                    onChange={(e) => this.props.onInputChange(e.target.value)}
-                />
+                <div style={{textAlign: 'center'}}>
+                    <TextField
+                        hintText="Search..."
+                        style={{width: '50%'}}
+                        onChange={(e) => this.props.onInputChange(e.target.value)}
+                    />
+                </div>
                 <List>
                     {userList}
                 </List>

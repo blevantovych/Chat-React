@@ -38,6 +38,7 @@ export default class ImagePicker extends React.Component {
               height: 300
           }
         })
+        window.dispatchEvent(new Event('resize'))
 
     }
     reader.readAsDataURL(input.files[0])
@@ -93,8 +94,9 @@ export default class ImagePicker extends React.Component {
         {/*<RaisedButton label="Dialog With Date Picker" onTouchTap={this.handleOpen} />*/}
         <Dialog
           title="Choose an image"
+          autoDetectWindowHeight={true}
           actions={actions}
-          modal={true}
+          modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >

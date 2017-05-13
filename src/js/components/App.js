@@ -126,6 +126,10 @@ class App extends Component {
 
         socket.on('message', (mes) => {
             console.log('new message', mes);
+            if (mes.username !== this.state.user.username) {
+                let audio = new Audio('play.mp3');
+                audio.play();
+            }
             let messages = [...this.state.messages, mes]
             this.setState({messages})
         })
