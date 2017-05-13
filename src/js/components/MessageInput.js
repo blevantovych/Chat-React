@@ -2,19 +2,33 @@ import React, { Component } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 
 class MessageInput extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <div>
                 <TextField
+                    name="message_input"
                     type="text"
-                    defaultValue={this.messageText}
+                    ref="message"
                     style={{width: '400px'}}
-                    onChange={(e) => this.messageText = e.target.value}
+                    onKeyPress={(e) => {
+                        if (e.charCode == 13) {
+                            this.props.onSendClick(this.refs.message.input.value)
+                            this.refs.message.input.value = ""
+                        }
+                    }}
                 />
 
-                <RaisedButton label="Send"
+                <RaisedButton
+                    label="Send"
                     primary={true}
-                    onClick={() => this.props.onSendClick(this.messageText)}
+                    onClick={() => {
+                        this.props.onSendClick(this.refs.message.input.value)
+                        this.refs.message.input.value = ""
+                    }}
                 />
             </div>
         );

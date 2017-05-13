@@ -24,6 +24,7 @@ class Profile extends Component {
                         <div class="profile__item--change">
                             <h1>Username: </h1>
                             <TextField
+                                name="edit_username"
                                 type="text"
                                 defaultValue={this.username}
                                 onChange={(e) => this.username = e.target.value}
@@ -33,6 +34,7 @@ class Profile extends Component {
                         <div class="profile__item--change">
                             <h1>Email: </h1>
                             <TextField
+                                name="edit_email"
                                 type="text"
                                 defaultValue={this.email}
                                 onChange={(e) => this.email = e.target.value}

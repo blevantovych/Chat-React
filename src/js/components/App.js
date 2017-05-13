@@ -64,7 +64,7 @@ class App extends Component {
             .then(({
                 token
             }) => {
-                this.setState({errorMessage: ''})
+                // this.setState({errorMessage: ''})
                 // console.log(token)
                 this.boom(token)
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {

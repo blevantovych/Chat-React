@@ -25,6 +25,7 @@ class Login extends Component {
             <div style={formWrapper}>
                 <div class="form" style={formStyles}>
                     <TextField
+                        name="username"
                         type="text"
                         style={{width: '400px'}}
                         hintText="username"
@@ -40,6 +41,7 @@ class Login extends Component {
                     />
 
                     <TextField
+                        name="password"
                         type="text"
                         style={{width: '400px', marginBottom: '20px'}}
                         hintText="password"
@@ -55,6 +57,7 @@ class Login extends Component {
                     />
 
                     <RaisedButton label="Login"
+                        name="login_btn"
                         primary={true}
                         disabled={buttonDisabled}
                         onClick={() => this.props.onLoginClick(this.state.username, this.state.password)}

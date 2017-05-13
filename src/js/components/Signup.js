@@ -28,6 +28,7 @@ class Signup extends Component {
             <div style={formWrapper}>
                 <div class="form" style={formStyles}>
                     <TextField
+                        name="username"
                         style={{width: '400px'}}
                         floatingLabelText="Username"
                         type="text"
@@ -43,6 +44,7 @@ class Signup extends Component {
                     />
 
                     <TextField
+                        name="email"
                         style={{width: '400px'}}
                         floatingLabelText="Email"
                         type="email"
@@ -58,6 +60,7 @@ class Signup extends Component {
                     />
 
                     <TextField
+                        name="password"
                         style={{width: '400px'}}
                         floatingLabelText="Password"
                         type="password"
@@ -73,6 +76,7 @@ class Signup extends Component {
                     />
 
                     <RaisedButton label="Sign up"
+                        name="sign-up_btn"
                         primary={true}
                         disabled={buttonDisabled}
                         onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password)}

@@ -12,7 +12,7 @@ class MessageList extends PureComponent {
         console.log('MessageList rerenders');
 
         const messageList = this.props.messages.map(message => (
-            <Card>
+            <Card key={message.time}>
                 <CardText style={{padding: '10px'}}>
                     {/*<Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />*/}
                     <Avatar src={this.props.usersImages[message.username]} />

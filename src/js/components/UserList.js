@@ -32,9 +32,10 @@ class UserList extends PureComponent {
 
         const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map(user => (
             <ListItem
+                key={user._id}
                 primaryText={user.username}
                 leftAvatar={<Avatar src={user.fileContent} />}
-                rightIcon={user.status == 'on' && <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar>}
+                rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
             >
             </ListItem>
         ));
@@ -43,6 +44,7 @@ class UserList extends PureComponent {
                 <br />
                 <div style={{textAlign: 'center'}}>
                     <TextField
+                        name="search"
                         hintText="Search..."
                         style={{width: '50%'}}
                         onChange={(e) => this.setState({filterValue: e.target.value})}

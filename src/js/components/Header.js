@@ -13,7 +13,6 @@ import ProfileIcon from 'material-ui/svg-icons/action/account-circle';
 
 const Menu = (props) => (
     <IconMenu
-        {...props}
         iconButtonElement={
             <IconButton><Hamburger color='white'/></IconButton>
         }
