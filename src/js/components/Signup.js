@@ -81,7 +81,6 @@ class Signup extends Component {
                         disabled={buttonDisabled}
                         onClick={() => {
                             this.props.onSignupClick(this.state.username, this.state.email, this.state.password)
-                            this.props.makeLoaderActive()
                         }}
                     />
 

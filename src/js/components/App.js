@@ -11,6 +11,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
 import Profile from './Profile'
+import Loader from './Loader'
 import {
     SIGNUP_URL,
     LOGIN_URL,
@@ -28,6 +29,7 @@ class App extends Component {
             messages: [],
             getMessagesOf: '',
             errorMessage: '',
+            loaderActive: false,
             users: [],
             logged: false,
             user: {
@@ -75,7 +77,8 @@ class App extends Component {
                         view: 'chat',
                         users: res[0],
                         messages: res[1],
-                        user: currentUser
+                        user: currentUser,
+                        loaderActive: false
                     })
                 })
             }).catch(e => {
@@ -118,13 +121,17 @@ class App extends Component {
         this.setState({view: 'profile'})
     }
 
+    makeLoaderActive = () => {
+        this.setState({loaderActive: true})
+    }
+
     sendMessage = (text) => {
         this.state.socket.emit('message', text)
     } 
 
     boom (token) {
         const socket = io.connect(SOCKET_URL)
-        this.setState({socket, errorMessage: ''})
+        this.setState({socket, errorMessage: '', loaderActive: true})
 
         socket.on('connect', () => {
             console.log('connected')
@@ -324,6 +331,7 @@ class App extends Component {
                         autoHideDuration={4000}
                         bodyStyle={{backgroundColor: 'rgb(0, 188, 212)'}}
                     />
+                    <Loader active={this.state.loaderActive} />
                     {mainContent}
                    
                 </div>

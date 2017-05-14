@@ -61,7 +61,6 @@ class Login extends Component {
                         disabled={buttonDisabled}
                         onClick={() => {
                             this.props.onLoginClick(this.state.username, this.state.password)
-                            this.props.makeLoaderActive()
                         }}
                     />
                 </div>
