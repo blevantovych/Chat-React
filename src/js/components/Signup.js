@@ -61,7 +61,7 @@ class Signup extends Component {
 
                     <TextField
                         name="password"
-                        style={{width: '400px'}}
+                        style={{width: '400px', marginBottom: '20px'}}
                         floatingLabelText="Password"
                         type="password"
                         errorText={this.state.passwordErr && "This field is required."}
@@ -79,7 +79,10 @@ class Signup extends Component {
                         name="sign-up_btn"
                         primary={true}
                         disabled={buttonDisabled}
-                        onClick={() => this.props.onSignupClick(this.state.username, this.state.email, this.state.password)}
+                        onClick={() => {
+                            this.props.onSignupClick(this.state.username, this.state.email, this.state.password)
+                            this.props.makeLoaderActive()
+                        }}
                     />
 
                 </div>

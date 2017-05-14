@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Login from './Login'
 import Signup from './Signup'
+import Loader from './Loader'
 
 const styles = {
   headline: {
@@ -18,7 +19,12 @@ export default class TabsExampleControlled extends React.Component {
     super(props);
     this.state = {
       value: 'b',
+      loaderActive: false
     };
+  }
+
+  makeLoaderActive = () => {
+    this.setState({loaderActive: true})
   }
 
   handleChange = (value) => {
@@ -29,18 +35,28 @@ export default class TabsExampleControlled extends React.Component {
 
   render() {
     return (
-      <Tabs
-        value={this.state.value}
-        onChange={this.handleChange}
-        style={{width: '400px', margin: 'auto', marginTop: '10px'}}
-      >
-        <Tab label="Sign up" value="a">
-            <Signup onSignupClick={this.props.onSignupClick} />
-        </Tab>
-        <Tab label="Login" value="b">
-            <Login onLoginClick={this.props.onLoginClick} />
-        </Tab>
-      </Tabs>
+      <div>
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+          style={{width: '400px', margin: 'auto', marginTop: '10px'}}
+        >
+          <Tab label="Sign up" value="a">
+              <Signup
+                onSignupClick={this.props.onSignupClick}
+                makeLoaderActive={this.makeLoaderActive}
+              />
+          </Tab>
+          <Tab label="Login" value="b">
+              <Login
+                onLoginClick={this.props.onLoginClick}
+                makeLoaderActive={this.makeLoaderActive}
+              />
+          </Tab>
+        </Tabs>
+        <Loader active={this.state.loaderActive} />
+      </div>
+      
     );
   }
 }

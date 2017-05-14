@@ -26,6 +26,7 @@ class App extends Component {
         super(props)
         this.state = {
             messages: [],
+            getMessagesOf: '',
             errorMessage: '',
             users: [],
             logged: false,
@@ -64,19 +65,19 @@ class App extends Component {
             .then(({
                 token
             }) => {
-                // this.setState({errorMessage: ''})
                 // console.log(token)
                 this.boom(token)
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
+                    let currentUser = res[0].filter(u => u.username === username)[0]
+                    currentUser.status = 'on'
                     this.setState({
                         logged: true,
                         view: 'chat',
                         users: res[0],
                         messages: res[1],
-                        user: res[0].filter(u => u.username === username)[0]
+                        user: currentUser
                     })
                 })
-                
             }).catch(e => {
                 console.log(`error occured in login`);
                 this.setState({errorMessage: 'There is no such user in db'})
@@ -123,7 +124,7 @@ class App extends Component {
 
     boom (token) {
         const socket = io.connect(SOCKET_URL)
-        this.setState({socket})
+        this.setState({socket, errorMessage: ''})
 
         socket.on('connect', () => {
             console.log('connected')
@@ -183,10 +184,7 @@ class App extends Component {
         })
 
         socket.on('infoChanged', (who) => {
-            console.log('some change their info');
             Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
-                console.log('after infochanged users\n',res[0]);
-                // console.log('message\n',res[0]);
                 this.setState({
                     users: res[0],
                     messages: res[1]
@@ -264,6 +262,10 @@ class App extends Component {
         injectTapEventPlugin()
     }
     
+    getMessagesOf = (user) => {
+        this.setState({getMessagesOf: user})    
+    }
+
     getMessages = () => {
         return fetch(MESSAGES_URL)
             .then(res => res.json())
@@ -284,7 +286,8 @@ class App extends Component {
                 mainContent = <Chat
                   onSendClick={this.sendMessage}
                   users={this.state.users}
-                  messages={this.state.messages}
+                  getMessagesOf={this.getMessagesOf}
+                  messages={this.state.messages.filter(m => m.username === this.state.getMessagesOf)}
                  />
                 break;
 
@@ -319,6 +322,7 @@ class App extends Component {
                         open={!!this.state.errorMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
+                        bodyStyle={{backgroundColor: 'rgb(0, 188, 212)'}}
                     />
                     {mainContent}
                    

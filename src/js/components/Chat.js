@@ -17,6 +17,7 @@ class Chat extends PureComponent {
           <UserList
             users={this.props.users.sort((u1, u2) => u1.status === 'on' ? -1 : 1)}
             onInputChange={this.props.onUserListInputChanged}
+            getMessagesOf={this.props.getMessagesOf}
           />
           <div style={{display: 'flex', flexDirection: 'column', width: '65vw'}}>
             <MessageList

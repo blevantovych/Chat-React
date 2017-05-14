@@ -1,12 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-
-import Badge from 'material-ui/Badge';
-import { Card } from 'material-ui';
 import TextField from 'material-ui/TextField';
 
 class UserList extends PureComponent {
@@ -36,6 +30,7 @@ class UserList extends PureComponent {
                 primaryText={user.username}
                 leftAvatar={<Avatar src={user.fileContent} />}
                 rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
+                onTouchTap={() => this.props.getMessagesOf(user.username)}
             >
             </ListItem>
         ));

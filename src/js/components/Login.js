@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 import { formWrapper, formStyles } from './formStyles';
-import Errors from './Errors'
 
 class Login extends Component {
 
@@ -60,7 +59,10 @@ class Login extends Component {
                         name="login_btn"
                         primary={true}
                         disabled={buttonDisabled}
-                        onClick={() => this.props.onLoginClick(this.state.username, this.state.password)}
+                        onClick={() => {
+                            this.props.onLoginClick(this.state.username, this.state.password)
+                            this.props.makeLoaderActive()
+                        }}
                     />
                 </div>
             </div>

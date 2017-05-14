@@ -55,6 +55,10 @@ class Profile extends Component {
                             onClick={() => this.props.updateUserInfo(this.username, this.bday, this.email)}
                         />
                     </Card>
+                    <RaisedButton label="Delete Accout"
+                        primary={true}
+                        onClick={() => console.log('deleting')}
+                    />
                 </div>
                 {/*<ImagePicker />*/}
                 {/*<img id="output" src="" alt=""/>*/}
