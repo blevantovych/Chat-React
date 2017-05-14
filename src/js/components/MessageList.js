@@ -10,19 +10,21 @@ function replaceURLWithHTMLLinks(text) {
 class MessageList extends PureComponent {
     render() {
         console.log('MessageList rerenders');
-
+        console.log(this.props);
         const messageList = this.props.messages.map(message => (
-            <Card key={message.time}>
-                <CardText style={{padding: '10px'}}>
-                    {/*<Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />*/}
-                    <Avatar src={this.props.usersImages[message.username]} />
-                    <h4 dangerouslySetInnerHTML={{ __html: replaceURLWithHTMLLinks(message.msg) }}></h4>
-                    <br/>
-                    {(new Date(message.time)).toLocaleString()}
-                    <br/>
-                    {message.username}
-                </CardText>
-            </Card>
+            <div style={this.props.currentUserId !== message.from ? {textAlign: 'right'}  : null}>
+                <Card key={message.time}>
+                    <CardText style={{padding: '10px'}}>
+                        {/*<Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />*/}
+                        <Avatar src={this.props.usersImages[message.from]} />
+                        <h4 dangerouslySetInnerHTML={{ __html: replaceURLWithHTMLLinks(message.msg) }}></h4>
+                        <br/>
+                        {(new Date(message.time)).toLocaleString()}
+                        <br/>
+                        {message.username}
+                    </CardText>
+                </Card>
+            </div>
         ));
         return (
             <div class="message-list">

@@ -24,15 +24,24 @@ class UserList extends PureComponent {
 
         console.log('Userlist rerender');
 
-        const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map(user => (
-            <ListItem
-                key={user._id}
-                primaryText={user.username}
-                leftAvatar={<Avatar src={user.fileContent} />}
-                rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
-                onTouchTap={() => this.props.getMessagesOf(user.username)}
-            >
-            </ListItem>
+        const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map((user, i) => (
+            <div ref={'user'+i}>
+                <ListItem
+                    key={user._id}
+                    //style={this.state.active ? {backgroundColor: 'rgba(165,89,0,0.2)'} : null}
+                    primaryText={user.username}
+                    leftAvatar={<Avatar src={user.fileContent} />}
+                    rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
+                    onTouchTap={() => {
+                        this.props.getMessagesOf(user._id)
+                        if (this.active)
+                            this.active.style.backgroundColor = ""
+                        this.active = this.refs['user'+i]
+                        this.refs['user'+i].style.backgroundColor = '#FF8DB4'
+                    }}
+                >
+                </ListItem>
+            </div>
         ));
         return (
             <div class="user-list">

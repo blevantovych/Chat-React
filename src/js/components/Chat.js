@@ -8,7 +8,7 @@ class Chat extends PureComponent {
 
   render() {
     const userImages = this.props.users.reduce((res, user) => {
-      res[user.username] = user.fileContent
+      res[user._id] = user.fileContent
       return res
     }, {})
     return (
@@ -23,8 +23,8 @@ class Chat extends PureComponent {
             <MessageList
                 messages={[...this.props.messages].reverse()}
                 usersImages={userImages}
+                currentUserId={this.props.currentUserId}
             />
-            
             <MessageInput onSendClick={this.props.onSendClick} />
           </div>
         </div>

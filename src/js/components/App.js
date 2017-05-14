@@ -126,7 +126,11 @@ class App extends Component {
     }
 
     sendMessage = (text) => {
-        this.state.socket.emit('message', text)
+        this.state.socket.emit('message', {
+            text,
+            from: this.state.user._id,
+            to: this.state.getMessagesOf
+        })
     } 
 
     boom (token) {
@@ -269,8 +273,8 @@ class App extends Component {
         injectTapEventPlugin()
     }
     
-    getMessagesOf = (user) => {
-        this.setState({getMessagesOf: user})    
+    getMessagesOf = (user_id) => {
+        this.setState({getMessagesOf: user_id})    
     }
 
     getMessages = () => {
@@ -294,7 +298,11 @@ class App extends Component {
                   onSendClick={this.sendMessage}
                   users={this.state.users}
                   getMessagesOf={this.getMessagesOf}
-                  messages={this.state.messages.filter(m => m.username === this.state.getMessagesOf)}
+                  currentUserId={this.state.user._id}
+                  messages={this.state.messages.filter(m => {
+                    return (m.to === this.state.getMessagesOf && m.from === this.state.user._id) ||
+                        (m.to === this.state.user._id && m.from === this.state.getMessagesOf)
+                    })}
                  />
                 break;
 
