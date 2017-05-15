@@ -21,7 +21,14 @@ class Login extends Component {
             (this.state.passwordErr || this.state.usernameErr) ||
             (!this.state.passwordDirty || !this.state.usernameDirty)
         return (
-            <div style={formWrapper}>
+            <div
+                style={formWrapper}
+                onKeyPress={(e) => {
+                    if (e.charCode == 13) {
+                        this.props.onLoginClick(this.state.username, this.state.password)
+                    }
+                }}
+            >
                 <div class="form" style={formStyles}>
                     <TextField
                         name="username"
@@ -41,7 +48,7 @@ class Login extends Component {
 
                     <TextField
                         name="password"
-                        type="text"
+                        type="password"
                         style={{width: '400px', marginBottom: '20px'}}
                         hintText="password"
                         floatingLabelText="Password"

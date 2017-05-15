@@ -48,9 +48,6 @@ class App extends Component {
     }
 
     login = (username, password) => {
-        console.log(`trying to login with
-                      username: ${username}
-                      password: ${password}`)
             
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
@@ -94,13 +91,8 @@ class App extends Component {
             this.setState({view: 'chat'})
     }
 
-    signup = (username, email, password) => {
-        console.log(`trying to sign up with
-                      username: ${username}
-                      password: ${password}
-                      email: ${email}
-                      `)
-            
+    signup = (username, email, password, initialImage) => {
+        console.log(initialImage);
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
 
@@ -108,7 +100,7 @@ class App extends Component {
             method: 'post',
             headers: myHeaders,
             mode: 'cors',
-            body: JSON.stringify({ username, email, password })
+            body: JSON.stringify({ username, email, password, fileContent: initialImage })
         }
         fetch(SIGNUP_URL, myInit)
             .then(res => console.log(res))

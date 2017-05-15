@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { formWrapper, formStyles } from './formStyles';
-import { TextField, RaisedButton } from 'material-ui';
+import React, { Component } from 'react'
+import { formWrapper, formStyles } from './formStyles'
+import { TextField, RaisedButton } from 'material-ui'
+import genImage from '../helpers/genImageFromLetter'
 
 class Signup extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             buttonDisabled: false,
             username: '',
@@ -25,7 +26,13 @@ class Signup extends Component {
             (this.state.passwordErr || this.state.usernameErr || this.state.emailErr) ||
             (!this.state.passwordDirty || !this.state.usernameDirty || !this.state.emailDirty)
         return (
-            <div style={formWrapper}>
+            <div
+                style={formWrapper}
+                onKeyPress={(e) => {
+                    if (e.charCode == 13) {
+                        this.props.onSignupClick(this.state.username, this.state.email, this.state.password, genImage(this.state.username[0]))
+                    }
+                }}>
                 <div class="form" style={formStyles}>
                     <TextField
                         name="username"
@@ -80,14 +87,13 @@ class Signup extends Component {
                         primary={true}
                         disabled={buttonDisabled}
                         onClick={() => {
-                            this.props.onSignupClick(this.state.username, this.state.email, this.state.password)
+                            this.props.onSignupClick(this.state.username, this.state.email, this.state.password, genImage(this.state.username[0]))
                         }}
                     />
-
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default Signup;
+export default Signup

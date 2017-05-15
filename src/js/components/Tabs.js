@@ -35,14 +35,14 @@ export default class TabsExampleControlled extends React.Component {
           onChange={this.handleChange}
           style={{width: '400px', margin: 'auto', marginTop: '10px'}}
         >
-          <Tab label="Sign up" value="a">
-              <Signup
-                onSignupClick={this.props.onSignupClick}
-              />
-          </Tab>
           <Tab label="Login" value="b">
               <Login
                 onLoginClick={this.props.onLoginClick}
+              />
+          </Tab>
+          <Tab label="Sign up" value="a">
+              <Signup
+                onSignupClick={this.props.onSignupClick}
               />
           </Tab>
         </Tabs>
