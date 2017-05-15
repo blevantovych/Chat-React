@@ -1,37 +1,65 @@
-import React, { Component, PureComponent } from 'react';
-import { Card, CardText } from 'material-ui/Card';
-import Avatar from 'material-ui/Avatar';
+import React, { Component, PureComponent } from 'react'
+import { Card, CardText } from 'material-ui/Card'
+import Avatar from 'material-ui/Avatar'
+import { List, ListItem } from 'material-ui/List'
+import ReactDOM from 'react-dom'
 
 function replaceURLWithHTMLLinks(text) {
-    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    return text.replace(exp,`<a target="_blank" href='$1'>$1</a>`); 
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.]*[-A-Z0-9+&@#\/%=~_|])/ig
+    return text.replace(exp,`<a target="_blank" href='$1'>$1</a>`) 
 }
 
+
 class MessageList extends PureComponent {
+    constructor(props) {
+        super(props)
+    }
+
+    scrollToBottom = () => {
+        const node = ReactDOM.findDOMNode(this.messagesEnd)
+        node.scrollIntoView({behavior: "smooth"})
+    }
+
+    componentDidMount() {
+        this.scrollToBottom()
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom()
+    }
+ 
     render() {
-        console.log('MessageList rerenders');
-        console.log(this.props);
+        console.log('MessageList rerenders')
+        console.log(this.props)
+
+        let u_id = this.props.currentUserId
         const messageList = this.props.messages.map(message => (
-            <div style={this.props.currentUserId !== message.from ? {textAlign: 'right'}  : null}>
-                <Card key={message.time}>
-                    <CardText style={{padding: '10px'}}>
-                        {/*<Avatar src={message.user.fileContent ? message.user.fileContent : "http://www.sassijunior.com/wp-content/themes/junior/assets//img/placeholder.png"} />*/}
-                        <Avatar src={this.props.usersImages[message.from]} />
-                        <h4 dangerouslySetInnerHTML={{ __html: replaceURLWithHTMLLinks(message.msg) }}></h4>
-                        <br/>
-                        {(new Date(message.time)).toLocaleString()}
-                        <br/>
-                        {message.username}
-                    </CardText>
-                </Card>
+            <div style={u_id !== message.from ? {textAlign: 'right'}  : null}>
+                <ListItem
+                    style={{width: 'auto'}}
+                    key={message.time}
+                    leftAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
+                    rightAvatar={u_id !== message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
+                    primaryText={<h4 style={u_id !== message.from ? {marginRight: '10px'} : null} dangerouslySetInnerHTML={{ __html: replaceURLWithHTMLLinks(message.msg) }}></h4>}
+                    secondaryText={<span style={u_id !== message.from ? {marginRight: '10px'} : null}>{(new Date(message.time)).toLocaleString()}</span>}
+                >   
+                </ListItem>
             </div>
-        ));
+        ))
         return (
             <div class="message-list">
-                {messageList}
+                <List>
+                    {messageList}
+                </List>
+                <div
+                    style={{float: 'left', clear: 'both'}}
+                    ref={(el) => { this.messagesEnd = el; }}
+                >
+
+                </div>
             </div>
-        );
+        )
     }
 }
 
-export default MessageList;
+export default MessageList

@@ -21,7 +21,7 @@ class Chat extends PureComponent {
           />
           <div style={{display: 'flex', flexDirection: 'column', width: '65vw'}}>
             <MessageList
-                messages={[...this.props.messages].reverse()}
+                messages={this.props.messages}
                 usersImages={userImages}
                 currentUserId={this.props.currentUserId}
             />
