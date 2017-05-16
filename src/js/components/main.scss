@@ -26,8 +26,8 @@
 
 .message-list {
     // width: 60%;
-    overflow-y: scroll;
-    height: 80vh;
+    overflow: auto;
+    height: 70vh;
 }
 
 .user-list {

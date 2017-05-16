@@ -9,6 +9,9 @@ function replaceURLWithHTMLLinks(text) {
     return text.replace(exp,`<a target="_blank" href='$1'>$1</a>`) 
 }
 
+function replaceNewLinesWithBr(text) {
+    return text.replace(/\n/g, '<br/>')
+}
 
 class MessageList extends PureComponent {
     constructor(props) {
@@ -40,7 +43,7 @@ class MessageList extends PureComponent {
                     key={message.time}
                     leftAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
                     rightAvatar={u_id !== message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
-                    primaryText={<h4 style={u_id !== message.from ? {marginRight: '10px'} : null} dangerouslySetInnerHTML={{ __html: replaceURLWithHTMLLinks(message.msg) }}></h4>}
+                    primaryText={<h4 style={u_id !== message.from ? {marginRight: '10px'} : null} dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg)) }}></h4>}
                     secondaryText={<span style={u_id !== message.from ? {marginRight: '10px'} : null}>{(new Date(message.time)).toLocaleString()}</span>}
                 >   
                 </ListItem>
@@ -55,7 +58,6 @@ class MessageList extends PureComponent {
                     style={{float: 'left', clear: 'both'}}
                     ref={(el) => { this.messagesEnd = el; }}
                 >
-
                 </div>
             </div>
         )
