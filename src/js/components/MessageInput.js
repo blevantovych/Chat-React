@@ -30,7 +30,7 @@ class MessageInput extends Component {
                 <TextField
                     name="message_input"
                     type="text"
-                    ref="message"
+                    placeholder="Type your message"
                     value={this.state.msgText}
                     multiLine={true}
                     onChange={(e) => this.setState({msgText: e.target.value})}

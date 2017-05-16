@@ -9,7 +9,7 @@ import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import LogoutIcon from 'material-ui/svg-icons/action/exit-to-app';
 import ProfileIcon from 'material-ui/svg-icons/action/account-circle';
-
+import PrefsIcon from 'material-ui/svg-icons/action/settings';
 
 const Menu = (props) => (
     <IconMenu
@@ -20,6 +20,7 @@ const Menu = (props) => (
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
     >
         <MenuItem primaryText="Profile" rightIcon={<ProfileIcon />} onTouchTap={props.onProfileClick} />
+        <MenuItem primaryText="Preferences" rightIcon={<PrefsIcon />} onTouchTap={props.onPrefsClick} />
         <MenuItem primaryText="Log out" rightIcon={<LogoutIcon />} onTouchTap={props.onLogoutClick} />
     </IconMenu>
 );
@@ -33,7 +34,11 @@ class Header extends Component {
             <div style={{minWidth: '150px', justifyContent: 'space-around', display: 'flex', alignItems: 'center'}}>
                 <h4 style={{color: 'white', fontWeight: 'bold', fontSize: '1.2em', marginRight: '10px'}}>{this.props.username}</h4>
                 {this.props.userImage && <Avatar src={this.props.userImage} />}
-                <Menu onProfileClick={this.props.onProfileClick} onLogoutClick={this.props.onLogoutClick} />
+                <Menu
+                    onProfileClick={this.props.onProfileClick}
+                    onLogoutClick={this.props.onLogoutClick}
+                    onPrefsClick={this.props.onPrefsClick}
+                />
             </div>
             : null
         return (

@@ -11,6 +11,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
 import Profile from './Profile'
+import Prefs from './Prefs'
 import Loader from './Loader'
 import {
     SIGNUP_URL,
@@ -26,6 +27,7 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            allowSound: true,
             messages: [],
             getMessagesOf: '',
             errorMessage: '',
@@ -36,7 +38,7 @@ class App extends Component {
                 username: '',
             },
             socket: null,
-            view: 'login' // ['profile', 'login', 'chat']
+            view: 'login' // ['profile', 'login', 'chat', 'prefs']
         }
     }
 
@@ -112,6 +114,11 @@ class App extends Component {
     switchToProfile = () => {
         this.setState({view: 'profile'})
     }
+    
+    switchToPrefs = () => {
+        console.log('switching to prefs');
+        this.setState({view: 'prefs'})
+    }
 
     makeLoaderActive = () => {
         this.setState({loaderActive: true})
@@ -136,7 +143,7 @@ class App extends Component {
 
         socket.on('message', (mes) => {
             console.log('new message', mes);
-            if (mes.from !== this.state.user._id) {
+            if (mes.from !== this.state.user._id && this.state.allowSound) {
                 let audio = new Audio('play.mp3')
                 audio.play()
             }
@@ -306,6 +313,13 @@ class App extends Component {
                    />
                 break;
 
+            case 'prefs':
+                mainContent = <Prefs
+                    checkedSound={this.state.allowSound}
+                    onCheckSound={(val) => this.setState({allowSound:val})}
+                />
+                break;
+
             case 'login':
                 mainContent = <Tabs onLoginClick={this.login} onSignupClick={this.signup} />
                 break;
@@ -318,12 +332,13 @@ class App extends Component {
             <MuiThemeProvider>
                 <div>
                     <Header
-                        onChatTextClick={this.onHeaderClick}
                         logged={this.state.logged}
-                        onLogoutClick={this.logout}
-                        onProfileClick={this.switchToProfile}
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
+                        onChatTextClick={this.onHeaderClick}
+                        onProfileClick={this.switchToProfile}
+                        onPrefsClick={this.switchToPrefs}
+                        onLogoutClick={this.logout}
                     />
                     <Snackbar
                         open={!!this.state.errorMessage}
