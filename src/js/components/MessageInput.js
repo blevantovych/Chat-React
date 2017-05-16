@@ -26,7 +26,7 @@ class MessageInput extends Component {
     
     render() {
         return (
-            <div>
+            <div style={{width: 'calc(100% - 40px)', margin: '20px'}}>
                 <TextField
                     name="message_input"
                     type="text"
@@ -34,7 +34,7 @@ class MessageInput extends Component {
                     value={this.state.msgText}
                     multiLine={true}
                     onChange={(e) => this.setState({msgText: e.target.value})}
-                    style={{width: '100%'}}
+                    style={{padding: '5px', width: 'calc(100% - 20px)'}}
                 />
 
                 {/*<RaisedButton

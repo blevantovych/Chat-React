@@ -50,7 +50,7 @@ class App extends Component {
     }
 
     login = (username, password) => {
-            
+        console.log('loggind')
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
 

@@ -19,7 +19,7 @@ class Chat extends PureComponent {
             onInputChange={this.props.onUserListInputChanged}
             getMessagesOf={this.props.getMessagesOf}
           />
-          <div style={{display: 'flex', flexDirection: 'column', width: '65vw'}}>
+          <div class="message-list-and-input">
             <MessageList
                 messages={this.props.messages}
                 usersImages={userImages}

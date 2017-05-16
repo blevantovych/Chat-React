@@ -28,9 +28,8 @@ class UserList extends PureComponent {
             <div ref={'user'+i}>
                 <ListItem
                     key={user._id}
-                    //style={this.state.active ? {backgroundColor: 'rgba(165,89,0,0.2)'} : null}
                     primaryText={user.username}
-                    leftAvatar={<Avatar src={user.fileContent} />}
+                    leftAvatar={<div class={user.status == 'on' ? 'online' : 'offline'}><Avatar src={user.fileContent} /></div>}
                     rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
                     onTouchTap={() => {
                         this.props.getMessagesOf(user._id)
@@ -44,9 +43,9 @@ class UserList extends PureComponent {
             </div>
         ));
         return (
-            <div class="user-list">
+            <div class="user-list-and-search">
                 <br />
-                <div style={{textAlign: 'center'}}>
+                <div style={{textAlign: 'center', background: 'white', zIndex: 2}}>
                     <TextField
                         name="search"
                         hintText="Search..."
@@ -54,9 +53,11 @@ class UserList extends PureComponent {
                         onChange={(e) => this.setState({filterValue: e.target.value})}
                     />
                 </div>
-                <List>
-                    {userList}
-                </List>
+                <div class="user-list">
+                    <List >
+                        {userList}
+                    </List>
+                </div>
             </div>
         );
     }

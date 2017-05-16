@@ -24,15 +24,53 @@
     display: flex;
 }
 
+@media screen and (max-width: 800px) {
+    .user-list-and-search {
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+    .online::after {
+        content: "";
+        position: relative;
+        top: -12px;
+        left: 28px;
+        width: 10px;
+        height: 10px;
+        background: rgb(66, 183, 42);
+        border: 2px solid white;
+        display: block;
+        border-radius: 50%;
+    }
+}
+
+
+.message-input {
+    width: calc(100% - 40px);
+    margin: 20px;
+    flex-grow: 5;
+}
+
 .message-list {
     // width: 60%;
+    flex-grow: 1;
     overflow: auto;
     height: 70vh;
 }
 
-.user-list {
-    width: 35vw;
-    overflow-y: auto;
-    height: 80vh    ;
+.message-list-and-input {
+    display: flex;
+    flex-direction: column;
+    width: 65vw;
+    height: 85vh;
 }
 
+.user-list-and-search {
+    width: 35vw;
+}
+
+.user-list {
+    width: 100%!important;
+    height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
