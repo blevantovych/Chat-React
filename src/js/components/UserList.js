@@ -28,7 +28,7 @@ class UserList extends PureComponent {
             <div ref={'user'+i}>
                 <ListItem
                     key={user._id}
-                    primaryText={user.username}
+                    primaryText={<span class="userlist--username">{user.username}</span>}
                     leftAvatar={<div class={user.status == 'on' ? 'online' : 'offline'}><Avatar src={user.fileContent} /></div>}
                     rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
                     onTouchTap={() => {

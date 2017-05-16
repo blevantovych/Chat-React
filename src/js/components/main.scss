@@ -29,6 +29,11 @@
         min-width: 90px !important;
         max-width: 90px !important;
     }
+    .userlist--username {
+        // transform: translateX(30px);
+        position: relative;
+        left: 30px;
+    }
     .online::after {
         content: "";
         position: relative;
@@ -71,6 +76,6 @@
 .user-list {
     width: 100%!important;
     height: 65vh;
-    overflow-y: auto;
+    // overflow-y: auto;
     overflow-x: hidden;
 }
