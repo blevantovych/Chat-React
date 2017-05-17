@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import Snackbar from 'material-ui/Snackbar';
-import { TextField, RaisedButton } from 'material-ui';
+import Snackbar from 'material-ui/Snackbar'
+import { TextField, RaisedButton } from 'material-ui'
+import sortUsers from '../helpers/sortUsers'
 import Header from './Header'
 import './main.scss'
 import './reset.scss'
@@ -33,6 +34,7 @@ class App extends Component {
             errorMessage: '',
             loaderActive: false,
             users: [],
+            newMessages: {},
             logged: false,
             user: {
                 username: '',
@@ -40,16 +42,19 @@ class App extends Component {
             socket: null,
             view: 'login' // ['profile', 'login', 'chat', 'prefs']
         }
+        this.audio = new Audio('play.mp3')
+        console.log('APP constructor is invoked')
     }
 
     logout = () => {
         console.log('loggin out')
-        this.setState({logged: false, view: 'login'})
+        this.setState({logged: false, view: 'login', newMessages: {}})
         this.state.socket.emit('leave', {username: this.state.user.username})
         this.state.socket.disconnect()
     }
 
     login = (username, password) => {
+        this.setState({loaderActive: true, errorMessage: ''})
         console.log('loggind')
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
@@ -67,6 +72,7 @@ class App extends Component {
                 token
             }) => {
                 // console.log(token)
+                localStorage.setItem('token', token)
                 this.boom(token)
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
                     let currentUser = res[0].filter(u => u.username === username)[0]
@@ -81,10 +87,7 @@ class App extends Component {
                     })
                 })
             }).catch(e => {
-                console.log(`error occured in login`);
-                this.setState({errorMessage: 'There is no such user in db'})
-            
-                console.log(e);
+                this.setState({errorMessage: 'There is no such user in db', loaderActive: false})
             }) 
     }
 
@@ -134,7 +137,7 @@ class App extends Component {
 
     boom (token) {
         const socket = io.connect(SOCKET_URL)
-        this.setState({socket, errorMessage: '', loaderActive: true})
+        this.setState({socket, errorMessage: ''})
 
         socket.on('connect', () => {
             console.log('connected')
@@ -143,12 +146,18 @@ class App extends Component {
 
         socket.on('message', (mes) => {
             console.log('new message', mes);
-            if (mes.from !== this.state.user._id && this.state.allowSound) {
-                let audio = new Audio('play.mp3')
-                audio.play()
+            if (mes.to === this.state.user._id && this.state.allowSound) {
+                this.audio.play()
             }
-            let messages = [...this.state.messages, mes]
-            this.setState({messages})
+
+            if (mes.to === this.state.user._id || mes.from === this.state.user._id) {
+                let messages = [...this.state.messages, mes]
+                let newMessage = 
+                    (mes.to === this.state.user._id && mes.from !== this.state.getMessagesOf) ? 
+                        ({[mes.from]: (this.state.newMessages[mes.from]) ? this.state.newMessages[mes.from]+1 : 1}) : null
+                this.setState({messages,  newMessages: Object.assign({}, this.state.newMessages, newMessage)})
+            }
+
         })
 
         socket.on('join', (who) => {
@@ -273,7 +282,9 @@ class App extends Component {
     }
     
     getMessagesOf = (user_id) => {
-        this.setState({getMessagesOf: user_id})    
+        let prevNewMessages = {...this.state.newMessages}
+        delete prevNewMessages[user_id]
+        this.setState({getMessagesOf: user_id, newMessages: prevNewMessages})    
     }
 
     getMessages = () => {
@@ -295,8 +306,9 @@ class App extends Component {
             case 'chat':
                 mainContent = <Chat
                   onSendClick={this.sendMessage}
-                  users={this.state.users}
+                  users={sortUsers(this.state.users)}
                   getMessagesOf={this.getMessagesOf}
+                  newMessages={this.state.newMessages}
                   currentUserId={this.state.user._id}
                   messages={this.state.messages.filter(m => {
                     return (m.to === this.state.getMessagesOf && m.from === this.state.user._id) ||

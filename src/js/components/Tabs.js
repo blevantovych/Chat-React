@@ -38,6 +38,7 @@ export default class TabsExampleControlled extends React.Component {
           <Tab label="Login" value="b">
               <Login
                 onLoginClick={this.props.onLoginClick}
+                lang="en"
               />
           </Tab>
           <Tab label="Sign up" value="a">

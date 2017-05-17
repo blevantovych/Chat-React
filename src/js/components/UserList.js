@@ -12,6 +12,7 @@ class UserList extends PureComponent {
         }
     }
 
+    
     render() {
         let greenCircle = <div style={{
                 width: '10px', height: '10px',
@@ -25,15 +26,21 @@ class UserList extends PureComponent {
         console.log('Userlist rerender');
 
         const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map((user, i) => (
-            <div ref={'user'+i}>
+            <div ref={'user'+i} class="user">
                 <ListItem
                     key={user._id}
+                    hoverColor='none'
+                    style={{height: '56px!important'}}
                     primaryText={<span
                         class="userlist--username"
                         dangerouslySetInnerHTML={{ __html: user.username.replace(new RegExp(this.state.filterValue, "gi"), `<mark>${this.state.filterValue}</mark>`) }}
                     >
                     </span>}
-                    leftAvatar={<div class={user.status == 'on' ? 'online' : 'offline'}><Avatar src={user.fileContent} /></div>}
+                    leftAvatar={<div class={user.status == 'on' ? 'online' : 'offline'}>
+                        <Avatar src={user.fileContent} />
+                        {(user._id in this.props.newMessages) ?
+                            <span class="new-message-counter">{this.props.newMessages[user._id]}</span> : null}
+                    </div>}
                     rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
                     onTouchTap={() => {
                         this.props.getMessagesOf(user._id)

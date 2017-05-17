@@ -6,7 +6,6 @@
 
 // for local development
 const port = 5000;
-
 export const SIGNUP_URL         = `http://localhost:${port}/signup`
 export const LOGIN_URL          = `http://localhost:${port}/login`
 export const USERS_URL          = `http://localhost:${port}/users`

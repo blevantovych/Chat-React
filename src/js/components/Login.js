@@ -2,6 +2,34 @@ import React, { Component, PureComponent } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 import { formWrapper, formStyles } from './formStyles';
 
+const Translations = {
+    ua: {
+        username: {
+            hintText: "Ім'я користувача",
+            floatingLabelText: "ім'я"
+        },
+        password: {
+            hintText: "Пароль",
+            floatingLabelText: "Пароль"
+        },
+        requiredField: "Це поле є обов'язковим",
+        loginBtn: "Зареєструватися"
+    },
+    en: {
+        username: {
+            hintText: "Username",
+            floatingLabelText: "username"
+        },
+        password: {
+            hintText: "Password",
+            floatingLabelText: "Password"
+        },
+
+        requiredField: "This field is required",
+        loginBtn: "Login"
+    }
+}
+
 class Login extends Component {
 
     constructor(props) {
@@ -34,9 +62,9 @@ class Login extends Component {
                         name="username"
                         type="text"
                         style={{width: '400px'}}
-                        hintText="username"
-                        errorText={this.state.usernameErr && "This field is required."}
-                        floatingLabelText="Username"
+                        hintText={Translations[this.props.lang].username.hintText}
+                        errorText={this.state.usernameErr && Translations[this.props.lang].requiredField}
+                        floatingLabelText={Translations[this.props.lang].username.floatingLabelText}
                         onChange={(e) => {
                             this.setState({
                                 usernameErr: !e.target.value,
@@ -50,9 +78,9 @@ class Login extends Component {
                         name="password"
                         type="password"
                         style={{width: '400px', marginBottom: '20px'}}
-                        hintText="password"
-                        floatingLabelText="Password"
-                        errorText={this.state.passwordErr && 'This field is required.'}
+                        hintText={Translations[this.props.lang].password.hintText}
+                        floatingLabelText={Translations[this.props.lang].password.floatingLabelText}
+                        errorText={this.state.passwordErr && Translations[this.props.lang].requiredField}
                         onChange={(e) => {
                             this.setState({
                                 password: e.target.value,
@@ -62,7 +90,7 @@ class Login extends Component {
                         }}
                     />
 
-                    <RaisedButton label="Login"
+                    <RaisedButton label={Translations[this.props.lang].loginBtn}
                         name="login_btn"
                         primary={true}
                         disabled={buttonDisabled}
