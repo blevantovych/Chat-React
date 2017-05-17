@@ -26,7 +26,7 @@ class MessageInput extends Component {
     
     render() {
         return (
-            <div style={{width: 'calc(100% - 40px)', margin: '20px'}}>
+            <div class="message_input">
                 <TextField
                     name="message_input"
                     type="text"

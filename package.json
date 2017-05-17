@@ -35,7 +35,8 @@
   },
   "scripts": {
     "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --port 5001 --content-base src --inline --hot",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "SET NODE_ENV=production && webpack -p"
   },
   "author": "",
   "license": "ISC"

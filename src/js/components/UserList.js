@@ -28,7 +28,11 @@ class UserList extends PureComponent {
             <div ref={'user'+i}>
                 <ListItem
                     key={user._id}
-                    primaryText={<span class="userlist--username">{user.username}</span>}
+                    primaryText={<span
+                        class="userlist--username"
+                        dangerouslySetInnerHTML={{ __html: user.username.replace(new RegExp(this.state.filterValue, "gi"), `<mark>${this.state.filterValue}</mark>`) }}
+                    >
+                    </span>}
                     leftAvatar={<div class={user.status == 'on' ? 'online' : 'offline'}><Avatar src={user.fileContent} /></div>}
                     rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
                     onTouchTap={() => {
