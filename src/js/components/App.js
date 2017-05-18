@@ -4,6 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import Snackbar from 'material-ui/Snackbar'
 import { TextField, RaisedButton } from 'material-ui'
 import sortUsers from '../helpers/sortUsers'
+import showNotification from '../helpers/showNotification'
 import Header from './Header'
 import './main.scss'
 import './reset.scss'
@@ -95,7 +96,12 @@ class App extends Component {
                         logged: true,
                         view: 'chat',
                         users: res[0],
-                        messages: res[1],
+                        messages: res[1].map(m => {
+                            if (m.to === currentUser._id && m.time > currentUser.lastTimeOnline) {
+                                m.unread = true
+                            } 
+                            return m
+                        }),
                         user: currentUser,
                         loaderActive: false,
                         newMessages: newMessagesFromCtn
@@ -170,21 +176,12 @@ class App extends Component {
             }
 
             if (mes.to === this.state.users_id) {
-                 if (Notification.permission === "granted") {
-                    let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
-                    setTimeout(function() {
-                        notification.close()
-                    }, 3000);
-                } else if (Notification.permission !== 'denied') {
-                    Notification.requestPermission((permission) => {
-                        if (permission === "granted") {
-                            let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
-                            setTimeout(function() {
-                                notification.close()
-                            }, 3000);
-                        }
-                    })
-                }
+                 showNotification()
+            }
+
+            if (mes.to === this.state.user._id && mes.from !== this.state.getMessagesOf) {
+                console.log('message should be marked as unread')
+                mes.unread = true
             }
 
             if (mes.to === this.state.user._id || mes.from === this.state.user._id) {
@@ -319,7 +316,18 @@ class App extends Component {
     getMessagesOf = (user_id) => {
         let prevNewMessages = {...this.state.newMessages}
         delete prevNewMessages[user_id]
+        let removeUnreadFromMessages = [...this.state.messages].map(m => {
+            let newMessageObj = Object.assign({}, m)
+            if (m.to === this.state.user._id && m.from === user_id) {
+                // m.unread = false
+                newMessageObj = Object.assign({}, m, {unread: false})
+            }
+            return newMessageObj
+        })
         this.setState({getMessagesOf: user_id, newMessages: prevNewMessages})    
+        setTimeout(() => {
+            this.setState({messages: removeUnreadFromMessages})
+        }, 2000)
     }
 
     getMessages = () => {

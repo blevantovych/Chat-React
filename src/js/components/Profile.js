@@ -19,7 +19,7 @@ class Profile extends Component {
                     <ImagePicker uploadImageToServer={this.props.uploadImageToServer} image={this.props.user.fileContent} />
                 </div>
                 <div class="user-info">
-                    <Card>
+                    <Card style={{boxShadow: 'none'}}>
                         
                         <div class="profile__item--change">
                             <h1>Username: </h1>
@@ -55,10 +55,10 @@ class Profile extends Component {
                             onClick={() => this.props.updateUserInfo(this.username, this.bday, this.email)}
                         />
                     </Card>
-                    <RaisedButton label="Delete Accout"
+                    {/*<RaisedButton label="Delete Accout"
                         primary={true}
                         onClick={() => console.log('deleting')}
-                    />
+                    />*/}
                 </div>
                 {/*<ImagePicker />*/}
                 {/*<img id="output" src="" alt=""/>*/}

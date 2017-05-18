@@ -39,7 +39,7 @@ class MessageList extends PureComponent {
         const messageList = this.props.messages.map(message => (
             <div style={u_id !== message.from ? {textAlign: 'right'}  : null}>
                 <ListItem
-                    style={{width: 'auto', cursor: 'default'}}
+                    style={{width: 'auto', cursor: 'default', backgroundColor: message.unread ? 'rgb(227, 255, 163)' : null}}
                     hoverColor={'transparent'}
                     key={message.time}
                     leftAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
