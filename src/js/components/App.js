@@ -47,6 +47,10 @@ class App extends Component {
         console.log('APP constructor is invoked')
     }
 
+    componentWillMount() {
+        injectTapEventPlugin()
+    }
+
     logout = () => {
         console.log('loggin out')
         this.setState({logged: false, view: 'login', newMessages: {}})
@@ -78,13 +82,23 @@ class App extends Component {
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
                     let currentUser = res[0].filter(u => u.username === username)[0]
                     currentUser.status = 'on'
+                    // generate newMessages 
+                    let newMessages = res[1].filter(m => m.to === currentUser._id && m.time > currentUser.lastTimeOnline)
+                    let newMessagesFromCtn = {}
+                    newMessages.forEach((m) => {
+                        newMessagesFromCtn[m.from] = newMessagesFromCtn[m.from] ? newMessagesFromCtn[m.from]+1 : 1
+                    })
+                    console.log(newMessages)
+                    console.log(newMessagesFromCtn)
+                    currentUser.lastTimeOnline
                     this.setState({
                         logged: true,
                         view: 'chat',
                         users: res[0],
                         messages: res[1],
                         user: currentUser,
-                        loaderActive: false
+                        loaderActive: false,
+                        newMessages: newMessagesFromCtn
                     })
                 })
             }).catch(e => {
@@ -139,6 +153,8 @@ class App extends Component {
 
     boom (token) {
         const socket = io.connect(SOCKET_URL)
+
+        
         this.setState({socket, errorMessage: ''})
 
         socket.on('connect', () => {
@@ -149,24 +165,26 @@ class App extends Component {
         socket.on('message', (mes) => {
             console.log('new message', mes);
 
-            if (Notification.permission === "granted") {
-                let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
-                setTimeout(function() {
-                    notification.close()
-                }, 3000);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission(function (permission) {
-                    if (permission === "granted") {
-                        let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
-                        setTimeout(function() {
-                            notification.close()
-                        }, 3000);
-                    }
-                })
-            }
-
             if (mes.to === this.state.user._id && this.state.allowSound) {
                 this.audio.play()
+            }
+
+            if (mes.to === this.state.users_id) {
+                 if (Notification.permission === "granted") {
+                    let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
+                    setTimeout(function() {
+                        notification.close()
+                    }, 3000);
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission((permission) => {
+                        if (permission === "granted") {
+                            let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
+                            setTimeout(function() {
+                                notification.close()
+                            }, 3000);
+                        }
+                    })
+                }
             }
 
             if (mes.to === this.state.user._id || mes.from === this.state.user._id) {
@@ -296,9 +314,7 @@ class App extends Component {
             })
     }
 
-    componentWillMount() {
-        injectTapEventPlugin()
-    }
+
     
     getMessagesOf = (user_id) => {
         let prevNewMessages = {...this.state.newMessages}
