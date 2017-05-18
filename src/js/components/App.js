@@ -29,6 +29,7 @@ class App extends Component {
         super(props)
         this.state = {
             allowSound: true,
+            notificationsAllowed: false,
             messages: [],
             getMessagesOf: '',
             errorMessage: '',
@@ -128,6 +129,7 @@ class App extends Component {
     }
 
     sendMessage = (text) => {
+
         this.state.socket.emit('message', {
             text,
             from: this.state.user._id,
@@ -146,6 +148,23 @@ class App extends Component {
 
         socket.on('message', (mes) => {
             console.log('new message', mes);
+
+            if (Notification.permission === "granted") {
+                let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
+                setTimeout(function() {
+                    notification.close()
+                }, 3000);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    if (permission === "granted") {
+                        let notification = new Notification(`New message from ${this.state.users.find(u => u._id === mes.from).username}`)
+                        setTimeout(function() {
+                            notification.close()
+                        }, 3000);
+                    }
+                })
+            }
+
             if (mes.to === this.state.user._id && this.state.allowSound) {
                 this.audio.play()
             }
@@ -328,7 +347,7 @@ class App extends Component {
             case 'prefs':
                 mainContent = <Prefs
                     checkedSound={this.state.allowSound}
-                    onCheckSound={(val) => this.setState({allowSound:val})}
+                    onCheckSound={(val) => this.setState({allowSound: val})}
                 />
                 break;
 

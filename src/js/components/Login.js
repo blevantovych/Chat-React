@@ -18,7 +18,7 @@ const Translations = {
     en: {
         username: {
             hintText: "Username",
-            floatingLabelText: "username"
+            floatingLabelText: "Username"
         },
         password: {
             hintText: "Password",
