@@ -87,7 +87,7 @@ export default class ImagePicker extends React.Component {
           <RaisedButton
               containerElement="label"
               label="new image"
-          ><input class="file-input" type="file" onChange={this.onFileUploaded}/></RaisedButton>
+          ><input class="file-input" type="file" accept="image/*" onChange={this.onFileUploaded}/></RaisedButton>
           
         </div>
 

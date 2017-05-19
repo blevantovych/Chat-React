@@ -84,11 +84,30 @@
     height: 70vh;
 }
 
+ @keyframes myanim {
+    0% {
+        background-color: rgb(209, 247, 153);
+    } 
+    100% {
+        background-color: white;
+    }
+}
+
+.unread_message_highlight {
+    border-radius: 20px;
+    animation: myanim 2s;
+}
+
 .message-list-and-input {
     display: flex;
     flex-direction: column;
     width: 65vw;
     height: 85vh;
+}
+
+.image-in-message {
+    padding: 5px;
+    border-radius: 10px;
 }
 
 .user-list-and-search {

@@ -25,7 +25,7 @@ class UserList extends PureComponent {
 
         console.log('Userlist rerender');
 
-        const userList = this.props.users.filter(u => u.username.includes(this.state.filterValue)).map((user, i) => (
+        const userList = this.props.users.filter(u => u.username.match(new RegExp(this.state.filterValue, "gi"))).map((user, i) => (
             <div ref={'user'+i} class="user">
                 <ListItem
                     key={user._id}

@@ -4,13 +4,23 @@ import Avatar from 'material-ui/Avatar'
 import { List, ListItem } from 'material-ui/List'
 import ReactDOM from 'react-dom'
 
-function replaceURLWithHTMLLinks(text) {
+function replaceURLWithHTMLLinks(text, img) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.]*[-A-Z0-9+&@#\/%=~_|])/ig
+    
+    if (img) {
+        return text.replace(exp,`<a target="_blank" href='$1'>
+            <div>
+                <h4>$1<h4>
+                <img class="image-in-message" src="${img}" height="100px" />
+            </div>
+        </a>`) 
+    }
     return text.replace(exp,`<a target="_blank" href='$1'>$1</a>`) 
 }
 
 function replaceNewLinesWithBr(text) {
-    return text.replace(/\n/g, '<br/>')
+    // return text.replace(/\n/g, '<br/>')
+    return text
 }
 
 class MessageList extends PureComponent {
@@ -36,20 +46,28 @@ class MessageList extends PureComponent {
         console.log(this.props)
 
         let u_id = this.props.currentUserId
-        const messageList = this.props.messages.map(message => (
-            <div style={u_id !== message.from ? {textAlign: 'right'}  : null}>
+        const messageList = this.props.messages.map(message => {
+            setTimeout(() => {
+                message.unread = false;
+            }, 2000);
+            return (
+            <div class={message.unread ? 'unread_message_highlight' : null} style={u_id !== message.from ? {textAlign: 'right'}  : null}>
                 <ListItem
-                    style={{width: 'auto', cursor: 'default', backgroundColor: message.unread ? 'rgb(227, 255, 163)' : null}}
+                    style={{width: 'auto', cursor: 'default'}}
                     hoverColor={'transparent'}
                     key={message.time}
                     leftAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
                     rightAvatar={u_id !== message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
-                    primaryText={<h4 style={u_id !== message.from ? {marginRight: '10px'} : null} dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg)) }}></h4>}
+                    primaryText={<div
+                        style={u_id !== message.from ? {marginRight: '10px'} : null}
+                        dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image)) }}>
+                    </div>
+                    }
                     secondaryText={<span style={u_id !== message.from ? {marginRight: '10px'} : null}>{(new Date(message.time)).toLocaleString()}</span>}
                 >   
                 </ListItem>
             </div>
-        ))
+        )})
         return (
             <div class="message-list">
                 <List>

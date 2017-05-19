@@ -316,18 +316,7 @@ class App extends Component {
     getMessagesOf = (user_id) => {
         let prevNewMessages = {...this.state.newMessages}
         delete prevNewMessages[user_id]
-        let removeUnreadFromMessages = [...this.state.messages].map(m => {
-            let newMessageObj = Object.assign({}, m)
-            if (m.to === this.state.user._id && m.from === user_id) {
-                // m.unread = false
-                newMessageObj = Object.assign({}, m, {unread: false})
-            }
-            return newMessageObj
-        })
-        this.setState({getMessagesOf: user_id, newMessages: prevNewMessages})    
-        setTimeout(() => {
-            this.setState({messages: removeUnreadFromMessages})
-        }, 2000)
+        this.setState({getMessagesOf: user_id, newMessages: prevNewMessages})
     }
 
     getMessages = () => {
