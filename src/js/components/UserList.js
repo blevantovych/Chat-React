@@ -53,7 +53,6 @@ class UserList extends PureComponent {
         ));
         return (
             <div class="user-list-and-search">
-                <br />
                 <div style={{textAlign: 'center', background: 'white', zIndex: 2}}>
                     <TextField
                         name="search"

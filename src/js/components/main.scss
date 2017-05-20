@@ -14,8 +14,8 @@
 
 * {
     // font-family: cursive, 'Marck Script', Helvetica, sans-serif !important;
-    // font-family: 'Roboto', sans-serif  !important;
-    font-family: 'Dosis', sans-serif !important;
+    font-family: 'Roboto', sans-serif  !important;
+    // font-family: 'Dosis', sans-serif !important;
     // font-family: 'Pacifico', sans-serif !important;
     // font-size: 1.05em !important;
 }
@@ -78,10 +78,9 @@
 }
 
 .message-list {
-    // width: 60%;
     flex-grow: 1;
     overflow: auto;
-    height: 70vh;
+    height: 75vh;
 }
 
  @keyframes myanim {
@@ -98,9 +97,15 @@
     animation: myanim 4s;
 }
 
+.message {
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
 .message-list-and-input {
     display: flex;
     flex-direction: column;
+    flex-grow: 0;
     width: 65vw;
     height: 85vh;
 }
@@ -111,12 +116,16 @@
 }
 
 .user-list-and-search {
-    width: 35vw;
+    width: 20vw!important;
+    flex-grow: 1;
+    flex-shrink: 0;
+    // border: 1px solid red;
 }
 
 .user-list {
     width: 100%!important;
-    height: 75vh;
+    // height: calc(100% - 300px);
+    height: 82vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -128,73 +137,10 @@
 
 
 
-.age_birthday_cake {
- 
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  width: 20px;
-  height: 20px;
-  background: lighten(#6B5344, 3%);
-  border-radius: 100%;
-  box-shadow: 0px 4px 0px #6B5344,
-    				0px 8px 0px #6B5344,
-    				0px 12px 0px #6B5344,
-    				0px 16px 0px #6B5344,
-    				0px 20px 0px #6B5344,
-    				0px 24px 0px #6B5344,
-    				0px 28px 0px #6B5344,
-    				0px 32px 0px #EB9F9F,
-    				0px 36px 0px #EB9F9F,
-    				0px 40px 0px #F8ECC9,
-    				0px 44px 0px #F8ECC9,
-    				0px 48px 0px #F8ECC9,
-    				0px 52px 0px #F8ECC9,
-    				0px 56px 0px #6B5344,
-    				0px 60px 0px #6B5344,
-    				0px 64px 0px #6B5344,
-    				0px 68px 0px #6B5344,
-    				0px 72px 0px #6B5344,
-    				0px 76px 0px #6B5344,
-    				0px 80px 0px #6B5344;
-  
-  &:before {
-    position: absolute;
-    right: 0;
-    top: 79px;
-    left: -25px;
-    margin: auto;
-    content: "";
-    width: 250px;
-    height: 50px;
-    border-radius: 100%;
-    background: #fff;
-    box-shadow: 0px 6px 0px rgba(0, 0, 0,.1);
-    z-index: -1;
-  }
-  
-  &:after {
-    position: absolute;
-    top: -30px;
-    left: 0;
-    right: 0;
-    margin: 0;
-    bottom: 0;
-    content: "28";
-    font-family: "Open Sans";
-    font-size: 3em;
-    font-weight: bold;
-    color: #E9F2F9;
-    -webkit-text-stroke: 2px #fff;
-    text-align: center;
-  }
-}
-
 .age_birthday {
     background: rgb(234, 123, 123);
     border-radius: 50%;
+    width: 10px;
+    height: 10px;
     padding: 5px;
 }

@@ -26,7 +26,7 @@ class MessageInput extends Component {
     
     render() {
         return (
-            <div class="message_input">
+            <div class="message-input">
                 <TextField
                     name="message_input"
                     type="text"

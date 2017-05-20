@@ -46,7 +46,7 @@ class MessageList extends PureComponent {
                 message.unread = false;
             }, 2000);
             return (
-            <div class={message.unread ? 'unread_message_highlight' : null} style={u_id !== message.from ? {textAlign: 'right'}  : null}>
+            <div class={(message.unread ? 'unread_message_highlight' : '') + ' message'} style={u_id !== message.from ? {textAlign: 'right'}  : null}>
                 <ListItem
                     style={{width: 'auto', cursor: 'default'}}
                     hoverColor={'transparent'}
