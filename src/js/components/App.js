@@ -100,6 +100,7 @@ class App extends Component {
                             if (m.to === currentUser._id && m.time > currentUser.lastTimeOnline) {
                                 m.unread = true
                             } 
+                            m.time = (new Date(m.time)).toLocaleDateString()
                             return m
                         }),
                         user: currentUser,
@@ -359,7 +360,7 @@ class App extends Component {
                   messages={this.state.messages.filter(m => {
                     return (m.to === this.state.getMessagesOf && m.from === this.state.user._id) ||
                         (m.to === this.state.user._id && m.from === this.state.getMessagesOf)
-                    })}
+                    }).sort((m1, m2) => m1.time > m2.time)}
                  />
                 break;
 
