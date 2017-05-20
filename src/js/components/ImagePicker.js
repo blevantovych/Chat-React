@@ -32,7 +32,7 @@ export default class ImagePicker extends React.Component {
         output.src = dataURL
 
         this.res = $('#output').croppie({
-          viewport: { width: 100, height: 100, type: 'circle' },
+          viewport: { width: 250, height: 250, type: 'circle' },
           boundary: {
               width: 300,
               height: 300

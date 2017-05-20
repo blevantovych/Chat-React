@@ -33,7 +33,7 @@ class Header extends Component {
 
         const menu = this.props.logged ?
             <div style={{minWidth: '150px', justifyContent: 'space-around', display: 'flex', alignItems: 'center'}}>
-                <Notification notification={this.props.notification} />
+                {this.props.notification.who.length > 0 ? <Notification notification={this.props.notification} /> : null}
                 <h4 style={{color: 'white', fontWeight: 'bold', fontSize: '1.2em', marginRight: '10px'}}>{this.props.username}</h4>
                 
                 {this.props.userImage && <Avatar src={this.props.userImage} />}

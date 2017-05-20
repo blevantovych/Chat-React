@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import BellIcon from 'material-ui/svg-icons/social/notifications'
+// import BellIcon from 'material-ui/svg-icons/social/notifications'
+import CakeIcon from 'material-ui/svg-icons/social/cake'
+import Avatar from 'material-ui/Avatar';
+import { List, ListItem } from 'material-ui/List';
 
 import Menu1 from 'material-ui/Menu';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -30,23 +33,25 @@ class Notification extends Component {
     }
 
     render() {
-        let usersWithBday = this.props.notification.who.map(u =>{
-            return <div>
-                <h4>{u.username} has birthday</h4>
-                <img
-                    src={u.fileContent}
-                    alt="birthday"
-                    height="50px"
-                />
-            </div>
+        let usersWithBday = this.props.notification.who.map(u => {
+            const age = (new Date()).getYear() - (new Date(u.bday)).getYear()
+            return <ListItem
+                    key={u._id}
+                    primaryText={<div>{u.username} turned <span class="age_birthday">{age}</span> today</div>}
+                    leftAvatar={<Avatar src={u.fileContent} />}
+                    onTouchTap={() => {
+                        console.log(`${u.username} turned 20 today`)
+                    }}
+                >
+            </ListItem>
         })
         return (
             <div>
-                <BellIcon
+                <CakeIcon
                     style={{marginRight: '10px', color: 'white', cursor: 'pointer'}}
                     onTouchTap={this.handleTouchTap}
                 >
-                </BellIcon>
+                </CakeIcon>
                 <Popover
                     open={this.state.open}
                     anchorEl={this.state.anchorEl}
@@ -56,9 +61,9 @@ class Notification extends Component {
                     animation={PopoverAnimationVertical}
                     >
          
-                    <div>
+                    <List>
                         {usersWithBday}
-                    </div>
+                    </List>
                 </Popover>
             </div>
         )
