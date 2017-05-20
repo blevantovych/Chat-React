@@ -12,7 +12,6 @@ class UserList extends PureComponent {
         }
     }
 
-    
     render() {
         let greenCircle = <div style={{
                 width: '10px', height: '10px',
@@ -26,7 +25,10 @@ class UserList extends PureComponent {
         console.log('Userlist rerender');
 
         const userList = this.props.users.filter(u => u.username.match(new RegExp(this.state.filterValue, "gi"))).map((user, i) => (
-            <div ref={'user'+i} class="user">
+            <div
+                class="user"
+                style={user._id === this.props.activeUser ? {backgroundColor: '#FF8DB4'} : null}
+            >
                 <ListItem
                     key={user._id}
                     hoverColor='none'
@@ -44,10 +46,6 @@ class UserList extends PureComponent {
                     rightIcon={user.status == 'on' ? <Avatar style={{backgroundColor: 'none'}}>{greenCircle}</Avatar> : null}
                     onTouchTap={() => {
                         this.props.getMessagesOf(user._id)
-                        if (this.active)
-                            this.active.style.backgroundColor = ""
-                        this.active = this.refs['user'+i]
-                        this.refs['user'+i].style.backgroundColor = '#FF8DB4'
                     }}
                 >
                 </ListItem>

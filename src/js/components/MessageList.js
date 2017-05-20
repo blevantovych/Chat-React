@@ -8,19 +8,14 @@ function replaceURLWithHTMLLinks(text, img) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.]*[-A-Z0-9+&@#\/%=~_|])/ig
     
     if (img) {
-        return text.replace(exp,`<a target="_blank" href='$1'>
-            <div>
-                <h4>$1<h4>
-                <img class="image-in-message" src="${img}" height="100px" />
-            </div>
-        </a>`) 
+        return text.replace(exp,`<a target="_blank" href='$1'><div><h4>$1<h4><img class="image-in-message" src="${img}" height="100px" /></div></a>`) 
     }
     return text.replace(exp,`<a target="_blank" href='$1'>$1</a>`) 
 }
 
 function replaceNewLinesWithBr(text) {
-    // return text.replace(/\n/g, '<br/>')
-    return text
+    return text.replace(/\n/g, '<br/>')
+    // return text
 }
 
 class MessageList extends PureComponent {

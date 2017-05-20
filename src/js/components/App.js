@@ -331,6 +331,19 @@ class App extends Component {
             .then(res => res.filter(u => !!u.username))
     }
 
+    usersWhoHaveBirthdayToday = () => {
+        return this.state.users.filter(u => {
+            if (u.bday) {
+                const userBday = new Date(u.bday)
+                const todaysDate = new Date()
+                if ((userBday.getDate() === todaysDate.getDate()) && (userBday.getMonth() === todaysDate.getMonth())) {
+                    return true
+                }
+            }
+            return false;
+        })
+    }
+
     render() {
 
         let mainContent;
@@ -338,8 +351,9 @@ class App extends Component {
             case 'chat':
                 mainContent = <Chat
                   onSendClick={this.sendMessage}
-                  users={sortUsers(this.state.users)}
+                  users={sortUsers(this.state.users, this.state.newMessages)}
                   getMessagesOf={this.getMessagesOf}
+                  activeUser={this.state.getMessagesOf}
                   newMessages={this.state.newMessages}
                   currentUserId={this.state.user._id}
                   messages={this.state.messages.filter(m => {
@@ -379,6 +393,7 @@ class App extends Component {
                         logged={this.state.logged}
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
+                        notification={{type: 'birthday', who: this.usersWhoHaveBirthdayToday()}}
                         onChatTextClick={this.onHeaderClick}
                         onProfileClick={this.switchToProfile}
                         onPrefsClick={this.switchToPrefs}

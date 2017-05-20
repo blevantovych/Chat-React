@@ -10,8 +10,7 @@ import FontIcon from 'material-ui/FontIcon';
 import LogoutIcon from 'material-ui/svg-icons/action/exit-to-app';
 import ProfileIcon from 'material-ui/svg-icons/action/account-circle';
 import PrefsIcon from 'material-ui/svg-icons/action/settings';
-import BellIcon from 'material-ui/svg-icons/social/notifications'
-import Popover from 'material-ui/Popover/Popover';
+import Notification from './Notification'
 
 const Menu = (props) => (
     <IconMenu
@@ -34,7 +33,7 @@ class Header extends Component {
 
         const menu = this.props.logged ?
             <div style={{minWidth: '150px', justifyContent: 'space-around', display: 'flex', alignItems: 'center'}}>
-                <BellIcon style={{marginRight: '10px', color: 'white', cursor: 'pointer'}}></BellIcon>
+                <Notification notification={this.props.notification} />
                 <h4 style={{color: 'white', fontWeight: 'bold', fontSize: '1.2em', marginRight: '10px'}}>{this.props.username}</h4>
                 
                 {this.props.userImage && <Avatar src={this.props.userImage} />}

@@ -19,6 +19,7 @@ class Chat extends PureComponent {
             onInputChange={this.props.onUserListInputChanged}
             getMessagesOf={this.props.getMessagesOf}
             newMessages={this.props.newMessages}
+            activeUser={this.props.activeUser}
           />
           <div class="message-list-and-input">
             <MessageList

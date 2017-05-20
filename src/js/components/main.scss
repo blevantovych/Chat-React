@@ -95,7 +95,7 @@
 
 .unread_message_highlight {
     border-radius: 20px;
-    animation: myanim 2s;
+    animation: myanim 4s;
 }
 
 .message-list-and-input {
@@ -116,8 +116,8 @@
 
 .user-list {
     width: 100%!important;
-    height: 85vh;
-    // overflow-y: auto;
+    height: 75vh;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
