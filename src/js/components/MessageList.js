@@ -3,6 +3,7 @@ import { Card, CardText } from 'material-ui/Card'
 import Avatar from 'material-ui/Avatar'
 import { List, ListItem } from 'material-ui/List'
 import ReactDOM from 'react-dom'
+import HighlightCode from './HighlightCode'
 
 function replaceURLWithHTMLLinks(text, img) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.]*[-A-Z0-9+&@#\/%=~_|])/ig
@@ -45,6 +46,13 @@ class MessageList extends PureComponent {
             setTimeout(() => {
                 message.unread = false;
             }, 2000);
+            const messageText = (message.msg.indexOf('#code') !== -1)
+                ? <HighlightCode code={message.msg}/>
+                : <div
+                style={u_id !== message.from ? {marginRight: '10px'} : null}
+                dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image)) }}>
+            </div>
+
             return (
             <div class={(message.unread ? 'unread_message_highlight' : '') + ' message'} style={u_id !== message.from ? {textAlign: 'right'}  : null}>
                 <ListItem
@@ -53,11 +61,7 @@ class MessageList extends PureComponent {
                     key={message.time}
                     leftAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
                     rightAvatar={u_id !== message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
-                    primaryText={<div
-                        style={u_id !== message.from ? {marginRight: '10px'} : null}
-                        dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image)) }}>
-                    </div>
-                    }
+                    primaryText={messageText}
                     secondaryText={<span style={u_id !== message.from ? {marginRight: '10px'} : null}>{(new Date(message.time)).toLocaleString()}</span>}
                 >   
                 </ListItem>

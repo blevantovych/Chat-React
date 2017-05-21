@@ -15,6 +15,8 @@ import Tabs from './Tabs'
 import Profile from './Profile'
 import Prefs from './Prefs'
 import Loader from './Loader'
+import HighlightCode from './HighlightCode'
+
 import {
     SIGNUP_URL,
     LOGIN_URL,
