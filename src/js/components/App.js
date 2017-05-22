@@ -16,6 +16,7 @@ import Profile from './Profile'
 import Prefs from './Prefs'
 import Loader from './Loader'
 import HighlightCode from './HighlightCode'
+import LocaleUser from './LocaleUser'
 import '../helpers/bluringSubscription'
 import {
     SIGNUP_URL,
@@ -402,6 +403,7 @@ class App extends Component {
                         onPrefsClick={this.switchToPrefs}
                         onLogoutClick={this.logout}
                     />
+                    <LocaleUser></LocaleUser>
                     <Snackbar
                         open={!!this.state.errorMessage}
                         message={this.state.errorMessage}
