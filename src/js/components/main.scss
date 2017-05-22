@@ -125,6 +125,7 @@
 .user-list {
     width: 100%!important;
     // height: calc(100% - 300px);
+    
     height: 82vh;
     overflow-y: auto;
     overflow-x: hidden;
@@ -135,12 +136,17 @@
     //style={{maxHeight: '56px!important', minHeight: '56px!important'}}
 }
 
-
-
 .age_birthday {
+    font-family: 'Marck Script', cursive, Helvetica, sans-serif !important;
+
     background: rgb(234, 123, 123);
     border-radius: 50%;
     width: 10px;
     height: 10px;
     padding: 5px;
+}
+
+
+.blur {
+    filter: blur(3px);
 }

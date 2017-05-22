@@ -40,7 +40,8 @@ class Notification extends Component {
                     primaryText={<div>{u.username} turned <span class="age_birthday">{age}</span> today</div>}
                     leftAvatar={<Avatar src={u.fileContent} />}
                     onTouchTap={() => {
-                        console.log(`${u.username} turned 20 today`)
+                        this.props.writeBirthdayBoy(u._id)
+                        this.setState({open: false})
                     }}
                 >
             </ListItem>

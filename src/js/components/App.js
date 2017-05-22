@@ -16,7 +16,7 @@ import Profile from './Profile'
 import Prefs from './Prefs'
 import Loader from './Loader'
 import HighlightCode from './HighlightCode'
-
+import '../helpers/bluringSubscription'
 import {
     SIGNUP_URL,
     LOGIN_URL,
@@ -396,6 +396,7 @@ class App extends Component {
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
                         notification={{type: 'birthday', who: this.usersWhoHaveBirthdayToday()}}
+                            writeBirthdayBoy={(user_id) => {this.getMessagesOf(user_id); $('textarea[name=message_input]').focus()}}
                         onChatTextClick={this.onHeaderClick}
                         onProfileClick={this.switchToProfile}
                         onPrefsClick={this.switchToPrefs}

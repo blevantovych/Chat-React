@@ -20,7 +20,11 @@ class MessageInput extends Component {
                 this.props.onSendClick(this.state.msgText)
                 this.setState({msgText: ''})
                 e.preventDefault()
-            } 
+            }
+            if (e.keyCode == 9) {
+  	            e.preventDefault()
+                this.setState({msgText: this.state.msgText + '    '})
+            }
         })
     }
     
