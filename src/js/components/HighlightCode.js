@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Highlight  from 'react-highlight';
+import React, { Component } from 'react'
+import Highlight  from 'react-highlight'
 
 class Code extends Component {
     render() {
@@ -9,9 +9,9 @@ class Code extends Component {
                      {this.props.code.replace('#code\n', '')}
                 </Highlight>
             </div>
-        );
+        )
     }
 }
 
 
-export default Code;
+export default Code

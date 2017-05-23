@@ -1,5 +1,4 @@
 import React, { Component, PureComponent } from 'react'
-import { Card, CardText } from 'material-ui/Card'
 import Avatar from 'material-ui/Avatar'
 import { List, ListItem } from 'material-ui/List'
 import ReactDOM from 'react-dom'
@@ -41,8 +40,8 @@ class MessageList extends PureComponent {
 
         const messageList = this.props.messages.map(message => {
             setTimeout(() => {
-                message.unread = false;
-            }, 2000);
+                message.unread = false
+            }, 2000)
             const codeMessage = message.msg.indexOf('#code\n') !== -1
             const messageText = codeMessage
                 ? <div style={u_id === message.from ? {marginRight: '10px'} : null}>

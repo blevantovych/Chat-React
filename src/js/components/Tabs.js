@@ -9,16 +9,16 @@ const styles = {
     paddingTop: 16,
     marginBottom: 12,
     fontWeight: 400,
-  },
-};
+  }
+}
 
 export default class TabsExampleControlled extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       value: 'b'
-    };
+    }
   }
 
   handleChange = (value) => {

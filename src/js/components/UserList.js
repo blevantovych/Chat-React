@@ -1,13 +1,13 @@
-import React, { Component, PureComponent } from 'react';
-import Avatar from 'material-ui/Avatar';
-import { List, ListItem } from 'material-ui/List';
-import TextField from 'material-ui/TextField';
+import React, { Component, PureComponent } from 'react'
+import Avatar from 'material-ui/Avatar'
+import { List, ListItem } from 'material-ui/List'
+import TextField from 'material-ui/TextField'
 import LocaleUser from './LocaleUser'
 
 class UserList extends PureComponent {
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             filterValue: '',
             showMap: false
@@ -24,7 +24,7 @@ class UserList extends PureComponent {
                 borderRadius: '50%'
             }}></div>
 
-        console.log('Userlist rerender');
+        console.log('Userlist rerender')
 
         const userList = this.props.users.filter(u => u.username.match(new RegExp(this.state.filterValue, "gi"))).map((user, i) => (
             <div
@@ -59,7 +59,7 @@ class UserList extends PureComponent {
                 >
                 </ListItem>
             </div>
-        ));
+        ))
         return (
             <div class="user-list-and-search">
                 {this.state.showMap && <LocaleUser lat={this.props.lat} lng={this.props.lgn} />}
@@ -78,8 +78,8 @@ class UserList extends PureComponent {
                     </List>
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default UserList;
+export default UserList

@@ -5,7 +5,7 @@ import { formWrapper, formStyles } from './formStyles'
 class Login extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             password: '',
             username: '',

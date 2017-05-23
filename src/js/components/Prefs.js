@@ -11,7 +11,7 @@ const styles = {
   checkbox: {
     marginBottom: 16,
   },
-};
+}
 
 class Prefs extends Component {
     render() {
@@ -24,7 +24,7 @@ class Prefs extends Component {
                     onCheck={(e, checked) => this.props.onCheckSound(checked)}
                 />
             </div>
-        );
+        )
     }
 }
 

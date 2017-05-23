@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import Snackbar from 'material-ui/Snackbar'
-import { TextField, RaisedButton } from 'material-ui'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
 import sortUsers from '../helpers/sortUsers'
 import showNotification from '../helpers/showNotification'
-import Header from './Header'
-import './main.scss'
-import './reset.scss'
-import Chat from './Chat'
+import '../helpers/bluringSubscription'
+
 import Login from './Login'
 import Signup from './Signup'
 import Tabs from './Tabs'
-import Profile from './Profile'
+import Header from './Header'
 import Prefs from './Prefs'
+import Profile from './Profile'
 import Loader from './Loader'
-import HighlightCode from './HighlightCode'
-import '../helpers/bluringSubscription'
+import Chat from './Chat'
+
+import './main.scss'
+import './reset.scss'
+
 import {
     SIGNUP_URL,
     LOGIN_URL,
@@ -106,7 +109,10 @@ class App extends Component {
                     })
                 })
             }).catch(e => {
-                this.setState({errorMessage: 'There is no such user in db', loaderActive: false})
+                this.setState({
+                    errorMessage: 'There is no such user in db',
+                    loaderActive: false
+                })
             }) 
     }
 
@@ -116,7 +122,6 @@ class App extends Component {
     }
 
     signup = (username, email, password, initialImage) => {
-        console.log(initialImage);
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
 
@@ -127,7 +132,7 @@ class App extends Component {
             body: JSON.stringify({ username, email, password, fileContent: initialImage })
         }
         fetch(SIGNUP_URL, myInit)
-            .then(res => console.log(res))
+            .then(res => res.json())
             .then(res => {
                 this.login(username, password)
             })
@@ -146,7 +151,6 @@ class App extends Component {
     }
 
     sendMessage = (text) => {
-
         this.state.socket.emit('message', {
             text,
             from: this.state.user._id,
@@ -154,7 +158,7 @@ class App extends Component {
         })
     } 
 
-    boom (token) {
+    boom = (token) => {
         const socket = io.connect(SOCKET_URL)
         this.setState({socket, errorMessage: ''})
 
@@ -197,31 +201,37 @@ class App extends Component {
                 if (u.username === who.user.username) {
                     u.status = 'on'
                 }
-                return u;
+                return u
             })
             
-            console.log(`${who.user.username} joined! ◕‿◕`);
+            console.log(`${who.user.username} joined! ◕‿◕`)
             this.setState({users: updatedUsers})
+
         })
 
         socket.on('leave', (who) => {
+
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.username) {
                     u.status = 'off'
                 }
-                return u;
+                return u
             })
-            console.log(`${who.username} has leaved ◕︵◕ `);
+            console.log(`${who.username} has leaved ◕︵◕ `)
             this.setState({users: updatedUsers})
+
         })
 
         socket.on('getpos', (pos) => {
+
             console.log(pos)
             this.setState({lat: pos.lat, lgn: pos.lgn})
+
         })
 
         socket.on('requestPos', (fromWho) => {
-            console.log('scoket requesting position')
+
+            console.log('requesting position')
             if (fromWho.id === this.state.user._id) {
                 
                 console.log('this is to me')
@@ -232,13 +242,13 @@ class App extends Component {
                         acc: location.coords.accuracy,
                         from: this.state.user._id
                     })
-                });
-             
+                })
             }
+
         })
 
         socket.on('imageChanged', (who) => {
-            console.log(`${who.username} has changed his/her profile image`);
+
             let indexOfUser = this.state.users.findIndex(u => u.username === who.username)
             let updatedUsers  = [...this.state.users]
             updatedUsers.splice(indexOfUser, 1)
@@ -247,15 +257,18 @@ class App extends Component {
             userWhoChangedImage.fileContent = who.image
             
             this.setState({users: updatedUsers.concat(userWhoChangedImage)})
+
         })
 
         socket.on('infoChanged', (who) => {
+
             Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
                 this.setState({
                     users: res[0],
                     messages: res[1]
                 })
             })
+
         })
     }
     
@@ -276,19 +289,14 @@ class App extends Component {
             mode: 'cors',
             body: JSON.stringify({ username: this.state.user.username, fileContent: base64 })
         }
+
         this.setState({user: Object.assign({}, this.state.user, {fileContent: base64})})
-        let cu = this.state.users.find(u => u.username === this.state.user.username)
-        cu.fileContent = base64
 
         this.state.socket.emit('imageChanged', {
             username: this.state.user.username,
             image: base64
         })
         fetch(UPLOAD_IMAGE_URL, myInit)
-            .then(res => res.json())
-            .then(r => {
-                console.log(r)
-            })
     }
 
     updateUserInfo = (username, bday, email) => {
@@ -340,31 +348,32 @@ class App extends Component {
     getMessages = () => {
         return fetch(MESSAGES_URL)
             .then(res => res.json())
-            .then(res => res.filter(m => typeof m.msg === 'string'))
+            .then(res => res)
     }
 
     getUsers = () => {
         return fetch(USERS_URL)
             .then(res => res.json())
-            .then(res => res.filter(u => !!u.username))
+            .then(res => res)
     }
 
     usersWhoHaveBirthdayToday = () => {
         return this.state.users.filter(u => {
             if (u.bday) {
                 const userBday = new Date(u.bday)
-                const todaysDate = new Date()
-                if ((userBday.getDate() === todaysDate.getDate()) && (userBday.getMonth() === todaysDate.getMonth())) {
+                const todayDate = new Date()
+                if ((userBday.getDate() === todayDate.getDate()) 
+                && (userBday.getMonth() === todayDate.getMonth())) {
                     return true
                 }
             }
-            return false;
+            return false
         })
     }
 
     render() {
 
-        let mainContent;
+        let mainContent
         switch (this.state.view) {
             case 'chat':
                 mainContent = <Chat
@@ -382,29 +391,29 @@ class App extends Component {
                         (m.to === this.state.user._id && m.from === this.state.getMessagesOf)
                     })}
                  />
-                break;
+                break
 
-            case 'profile': mainContent =
-                 <Profile
+            case 'profile':
+                 mainContent = <Profile
                     user={this.state.user}
                     uploadImageToServer={this.uploadImageToServer}
                     updateUserInfo={this.updateUserInfo}
                    />
-                break;
+                break
 
             case 'prefs':
                 mainContent = <Prefs
                     checkedSound={this.state.allowSound}
                     onCheckSound={(val) => this.setState({allowSound: val})}
                 />
-                break;
+                break
 
             case 'login':
                 mainContent = <Tabs onLoginClick={this.login} onSignupClick={this.signup} />
-                break;
+                break
 
             default:
-                break;
+                break
         }
 
         return (
@@ -415,7 +424,10 @@ class App extends Component {
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
                         notification={{type: 'birthday', who: this.usersWhoHaveBirthdayToday()}}
-                            writeBirthdayBoy={(user_id) => {this.getMessagesOf(user_id); document.querySelector('textarea[name=message_input]').focus()}}
+                        writeBirthdayBoy={(user_id) => {
+                            this.getMessagesOf(user_id)
+                            document.querySelector('textarea[name=message_input]').focus()
+                        }}
                         onChatTextClick={this.onHeaderClick}
                         onProfileClick={this.switchToProfile}
                         onPrefsClick={this.switchToPrefs}
@@ -429,7 +441,6 @@ class App extends Component {
                     />
                     <Loader active={this.state.loaderActive} />
                     {mainContent}
-                   
                 </div>
             </MuiThemeProvider>
         )

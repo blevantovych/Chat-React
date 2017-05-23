@@ -1,5 +1,4 @@
 import React, { Component, PureComponent } from 'react'
-import { TextField, RaisedButton } from 'material-ui'
 import UserList from './UserList'
 import MessageList from './MessageList'
 import MessageInput from './MessageInput'
@@ -34,8 +33,8 @@ class Chat extends PureComponent {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Chat;
+export default Chat

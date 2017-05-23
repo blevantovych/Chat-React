@@ -1,7 +1,7 @@
-var debug = process.env.NODE_ENV !== "production";
-// var debug = false;
-var webpack = require('webpack');
-var path = require('path');
+var debug = process.env.NODE_ENV !== "production"
+// var debug = false
+var webpack = require('webpack')
+var path = require('path')
 
 module.exports = {
   context: path.join(__dirname, "src"),
@@ -39,4 +39,4 @@ module.exports = {
       sourcemap: false
     }),
   ],
-};
+}

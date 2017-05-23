@@ -14,7 +14,7 @@ class Notification extends Component {
     }
     
     handleTouchTap = (event) => {
-        event.preventDefault();
+        event.preventDefault()
         this.setState({
             open: true,
             anchorEl: event.currentTarget,
