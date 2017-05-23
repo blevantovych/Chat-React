@@ -19,8 +19,6 @@ export default class ImagePicker extends React.Component {
   }
 
   onFileUploaded = (event) => {
-    // console.log(event)
-    console.log('file uploaded')
     var input = event.target
 
     var reader = new FileReader()
@@ -38,7 +36,7 @@ export default class ImagePicker extends React.Component {
               height: 300
           }
         })
-        window.dispatchEvent(new Event('resize'))
+        window.dispatchEvent(new Event('resize')) // because lag in material-ui dialog (it is not centered)
 
     }
     reader.readAsDataURL(input.files[0])
@@ -50,15 +48,14 @@ export default class ImagePicker extends React.Component {
         re.style.width = '100px'
         re.src = base64
         re.onload = () => {
-          let canvas = document.createElement('canvas');
-          let ctx = canvas.getContext('2d');
+          let canvas = document.createElement('canvas')
+          let ctx = canvas.getContext('2d')
           canvas.width = 200
           canvas.height = 200
           ctx.imageSmoothingEnabled = true
           ctx.drawImage(re, 0, 0, 200, 200)
           this.props.uploadImageToServer(canvas.toDataURL())
         }
-        // this.props.uploadImageToServer(base64)
     })
     this.closeDialog()
   }
@@ -85,13 +82,14 @@ export default class ImagePicker extends React.Component {
         <div class="image-upload">
           <img class="profile-image" src={this.props.image} alt="profile-image" />
           <RaisedButton
-              containerElement="label"
-              label="new image"
-          ><input class="file-input" type="file" accept="image/*" onChange={this.onFileUploaded}/></RaisedButton>
+            containerElement="label"
+            label="new image"
+          >
+            <input class="file-input" type="file" accept="image/*" onChange={this.onFileUploaded} />
+          </RaisedButton>
           
         </div>
 
-        {/*<RaisedButton label="Dialog With Date Picker" onTouchTap={this.handleOpen} />*/}
         <Dialog
           title="Choose an image"
           autoDetectWindowHeight={true}
@@ -100,7 +98,7 @@ export default class ImagePicker extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <img id="output" src="" alt=""/>
+          <img id="output" src="" alt="" />
         </Dialog>
       </div>
     )

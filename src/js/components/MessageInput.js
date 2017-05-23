@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import { TextField, RaisedButton } from 'material-ui'
 
-function simulateKeyPress(character) {
-  jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
-}
-
 class MessageInput extends Component {
     constructor(props) {
         super(props)

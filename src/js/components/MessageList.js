@@ -16,7 +16,6 @@ function replaceURLWithHTMLLinks(text, img) {
 
 function replaceNewLinesWithBr(text) {
     return text.replace(/\n/g, '<br/>')
-    // return text
 }
 
 class MessageList extends PureComponent {
@@ -38,35 +37,60 @@ class MessageList extends PureComponent {
     }
  
     render() {
-        console.log('MessageList rerenders')
-        console.log(this.props)
-
         let u_id = this.props.currentUserId
+
         const messageList = this.props.messages.map(message => {
             setTimeout(() => {
                 message.unread = false;
             }, 2000);
-            const messageText = (message.msg.indexOf('#code') !== -1)
-                ? <HighlightCode code={message.msg}/>
+            const codeMessage = message.msg.indexOf('#code\n') !== -1
+            const messageText = codeMessage
+                ? <div style={u_id === message.from ? {marginRight: '10px'} : null}>
+                    <HighlightCode code={message.msg}/>
+                  </div> 
                 : <div
-                style={u_id !== message.to ? {marginRight: '10px'} : null}
-                dangerouslySetInnerHTML={{ __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image)) }}>
+                    style={u_id === message.from ? {marginRight: '10px'} : null}
+                    dangerouslySetInnerHTML={{
+                        __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image))
+                    }}>
             </div>
 
             return (
-            <div class={(message.unread ? 'unread_message_highlight' : '') + ' message'} style={u_id === message.from ? {textAlign: 'right'}  : null}>
-                <ListItem
-                    style={{width: 'auto', cursor: 'default'}}
-                    hoverColor={'transparent'}
-                    key={message.time}
-                    leftAvatar={u_id !== message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
-                    rightAvatar={u_id === message.from ? <Avatar src={this.props.usersImages[message.from]} /> : null}
-                    primaryText={messageText}
-                    secondaryText={<span style={u_id !== message.to ? {marginRight: '10px'} : null}>{(new Date(message.time)).toLocaleString()}</span>}
-                >   
-                </ListItem>
-            </div>
-        )})
+                <div
+                    class={(message.unread ? 'unread_message_highlight' : '') + ' message'}
+                    style={(u_id === message.from && !codeMessage) ? {textAlign: 'right'}  : null}
+                >
+                    <ListItem
+                        style={{width: 'auto', cursor: 'default'}}
+                        hoverColor={'transparent'}
+                        key={message.time}
+                        leftAvatar={u_id !== message.from
+                            ? <Avatar src={this.props.usersImages[message.from]} />
+                            : null
+                        }
+
+                        rightAvatar={u_id === message.from 
+                            ? <div style={{marginLeft: '10px'}}>
+                                <Avatar
+                                    src={this.props.usersImages[message.from]}
+                                /> 
+                              </div>
+                            : null
+                        }
+
+                        primaryText={messageText}
+                        secondaryText={
+                            <span
+                                style={u_id === message.from ? {marginRight: '10px'} : null}
+                            >
+                                {(new Date(message.time)).toLocaleString()}
+                            </span>}
+                    >   
+                    </ListItem>
+                </div>
+            )
+        })
+
         return (
             <div class="message-list">
                 <List>
@@ -74,7 +98,7 @@ class MessageList extends PureComponent {
                 </List>
                 <div
                     style={{float: 'left', clear: 'both'}}
-                    ref={(el) => { this.messagesEnd = el; }}
+                    ref={(el) => { this.messagesEnd = el }}
                 >
                 </div>
             </div>

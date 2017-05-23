@@ -3,19 +3,14 @@
     justify-content: space-between;
 }
 
-.user-list {
-    width: 40%!important;
-    // width: 400px;
-}
-
 .highlight {
     color: red;
 }
 
 * {
+    // font-family: 'Roboto', sans-serif  !important;
     // font-family: cursive, 'Marck Script', Helvetica, sans-serif !important;
-    font-family: 'Roboto', sans-serif  !important;
-    // font-family: 'Dosis', sans-serif !important;
+    font-family: 'Dosis', sans-serif !important;
     // font-family: 'Pacifico', sans-serif !important;
     // font-size: 1.05em !important;
 }
@@ -24,20 +19,14 @@
     display: flex;
 }
 
-
 @media screen and (max-width: 800px) {
     .user-list-and-search {
         min-width: 90px !important;
-        // flex-basis: 90px;
         max-width: 90px !important;
-        // width: 90px;
     }
     .userlist--username {
-        // transform: translateX(30px);
         position: relative;
         left: 30px;
-        // display: none;
-        // opacity: 0;
     }
     .online::after {
         content: "";
@@ -119,13 +108,11 @@
     width: 20vw!important;
     flex-grow: 1;
     flex-shrink: 0;
-    // border: 1px solid red;
 }
 
 .user-list {
+//    width: 40%!important;
     width: 100%!important;
-    // height: calc(100% - 300px);
-    
     height: 82vh;
     overflow-y: auto;
     overflow-x: hidden;
@@ -133,12 +120,10 @@
 
 .user {
     height: 56px;
-    //style={{maxHeight: '56px!important', minHeight: '56px!important'}}
 }
 
 .age_birthday {
     font-family: 'Marck Script', cursive, Helvetica, sans-serif !important;
-
     background: rgb(234, 123, 123);
     border-radius: 50%;
     width: 10px;
@@ -146,7 +131,13 @@
     padding: 5px;
 }
 
-
 .blur {
     filter: blur(3px);
+}
+
+.map {
+    position: absolute;
+    left: 420px;
+    top: 100px;
+    z-index: 12;
 }

@@ -16,7 +16,6 @@ import Profile from './Profile'
 import Prefs from './Prefs'
 import Loader from './Loader'
 import HighlightCode from './HighlightCode'
-import LocaleUser from './LocaleUser'
 import '../helpers/bluringSubscription'
 import {
     SIGNUP_URL,
@@ -44,11 +43,12 @@ class App extends Component {
             user: {
                 username: '',
             },
+            lat: null,
+            lgn: null,
             socket: null,
             view: 'login' // ['profile', 'login', 'chat', 'prefs']
         }
         this.audio = new Audio('play.mp3')
-        console.log('APP constructor is invoked')
     }
 
     componentWillMount() {
@@ -56,7 +56,6 @@ class App extends Component {
     }
 
     logout = () => {
-        console.log('loggin out')
         this.setState({logged: false, view: 'login', newMessages: {}})
         this.state.socket.emit('leave', {username: this.state.user.username})
         this.state.socket.disconnect()
@@ -64,7 +63,6 @@ class App extends Component {
 
     login = (username, password) => {
         this.setState({loaderActive: true, errorMessage: ''})
-        console.log('loggind')
         let myHeaders = new Headers()
         myHeaders.set('Content-Type', 'application/json') 
 
@@ -80,7 +78,6 @@ class App extends Component {
             .then(({
                 token
             }) => {
-                // console.log(token)
                 localStorage.setItem('token', token)
                 this.boom(token)
                 Promise.all([this.getUsers(), this.getMessages()]).then((res) => {
@@ -92,8 +89,6 @@ class App extends Component {
                     newMessages.forEach((m) => {
                         newMessagesFromCtn[m.from] = newMessagesFromCtn[m.from] ? newMessagesFromCtn[m.from]+1 : 1
                     })
-                    console.log(newMessages)
-                    console.log(newMessagesFromCtn)
                     currentUser.lastTimeOnline
                     this.setState({
                         logged: true,
@@ -143,7 +138,6 @@ class App extends Component {
     }
     
     switchToPrefs = () => {
-        console.log('switching to prefs');
         this.setState({view: 'prefs'})
     }
 
@@ -162,8 +156,6 @@ class App extends Component {
 
     boom (token) {
         const socket = io.connect(SOCKET_URL)
-
-        
         this.setState({socket, errorMessage: ''})
 
         socket.on('connect', () => {
@@ -172,7 +164,6 @@ class App extends Component {
         })
 
         socket.on('message', (mes) => {
-            console.log('new message', mes);
 
             if (mes.to === this.state.user._id && this.state.allowSound) {
                 this.audio.play()
@@ -183,7 +174,6 @@ class App extends Component {
             }
 
             if (mes.to === this.state.user._id && mes.from !== this.state.getMessagesOf) {
-                console.log('message should be marked as unread')
                 mes.unread = true
             }
 
@@ -200,7 +190,6 @@ class App extends Component {
         socket.on('join', (who) => {
 
             if (!this.state.users.find(u => u.username === who.user.username)) {
-                console.log(`I should see this image only if new user registers`);
                 this.setState({users: [...this.state.users, who.user]})
             }
 
@@ -216,7 +205,6 @@ class App extends Component {
         })
 
         socket.on('leave', (who) => {
-            console.log(who);
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.username) {
                     u.status = 'off'
@@ -225,6 +213,28 @@ class App extends Component {
             })
             console.log(`${who.username} has leaved ◕︵◕ `);
             this.setState({users: updatedUsers})
+        })
+
+        socket.on('getpos', (pos) => {
+            console.log(pos)
+            this.setState({lat: pos.lat, lgn: pos.lgn})
+        })
+
+        socket.on('requestPos', (fromWho) => {
+            console.log('scoket requesting position')
+            if (fromWho.id === this.state.user._id) {
+                
+                console.log('this is to me')
+                navigator.geolocation.getCurrentPosition((location) => {
+                    this.state.socket.emit('getpos', {
+                        lat: location.coords.latitude,
+                        lgn: location.coords.longitude,
+                        acc: location.coords.accuracy,
+                        from: this.state.user._id
+                    })
+                });
+             
+            }
         })
 
         socket.on('imageChanged', (who) => {
@@ -246,6 +256,13 @@ class App extends Component {
                     messages: res[1]
                 })
             })
+        })
+    }
+    
+    getUserPos = (id) => {
+        console.log('getting user pos')
+        this.state.socket.emit('requestPos', {
+            id
         })
     }
     
@@ -314,8 +331,6 @@ class App extends Component {
             })
     }
 
-
-    
     getMessagesOf = (user_id) => {
         let prevNewMessages = {...this.state.newMessages}
         delete prevNewMessages[user_id]
@@ -353,7 +368,10 @@ class App extends Component {
         switch (this.state.view) {
             case 'chat':
                 mainContent = <Chat
+                  lat={this.state.lat}
+                  lgn={this.state.lgn}
                   onSendClick={this.sendMessage}
+                  getUserPos={this.getUserPos}
                   users={sortUsers(this.state.users, this.state.newMessages)}
                   getMessagesOf={this.getMessagesOf}
                   activeUser={this.state.getMessagesOf}
@@ -366,8 +384,8 @@ class App extends Component {
                  />
                 break;
 
-            case 'profile':
-                mainContent = <Profile
+            case 'profile': mainContent =
+                 <Profile
                     user={this.state.user}
                     uploadImageToServer={this.uploadImageToServer}
                     updateUserInfo={this.updateUserInfo}
@@ -397,13 +415,12 @@ class App extends Component {
                         userImage={this.state.user && this.state.user.fileContent}
                         username={this.state.user.username}
                         notification={{type: 'birthday', who: this.usersWhoHaveBirthdayToday()}}
-                            writeBirthdayBoy={(user_id) => {this.getMessagesOf(user_id); $('textarea[name=message_input]').focus()}}
+                            writeBirthdayBoy={(user_id) => {this.getMessagesOf(user_id); document.querySelector('textarea[name=message_input]').focus()}}
                         onChatTextClick={this.onHeaderClick}
                         onProfileClick={this.switchToProfile}
                         onPrefsClick={this.switchToPrefs}
                         onLogoutClick={this.logout}
                     />
-                    <LocaleUser></LocaleUser>
                     <Snackbar
                         open={!!this.state.errorMessage}
                         message={this.state.errorMessage}

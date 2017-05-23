@@ -25,12 +25,18 @@ class Signup extends Component {
         let buttonDisabled =
             (this.state.passwordErr || this.state.usernameErr || this.state.emailErr) ||
             (!this.state.passwordDirty || !this.state.usernameDirty || !this.state.emailDirty)
+            
         return (
             <div
                 style={formWrapper}
                 onKeyPress={(e) => {
                     if (e.charCode == 13) {
-                        this.props.onSignupClick(this.state.username, this.state.email, this.state.password, genImage(this.state.username[0]))
+                        this.props.onSignupClick(
+                            this.state.username,
+                            this.state.email,
+                            this.state.password,
+                            genImage(this.state.username[0])
+                        )
                     }
                 }}>
                 <div class="form" style={formStyles}>
@@ -87,7 +93,12 @@ class Signup extends Component {
                         primary={true}
                         disabled={buttonDisabled}
                         onClick={() => {
-                            this.props.onSignupClick(this.state.username, this.state.email, this.state.password, genImage(this.state.username[0]))
+                            this.props.onSignupClick(
+                                this.state.username,
+                                this.state.email,
+                                this.state.password,
+                                genImage(this.state.username[0])
+                            )
                         }}
                     />
                 </div>

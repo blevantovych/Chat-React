@@ -2,13 +2,15 @@ import React, { Component, PureComponent } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import TextField from 'material-ui/TextField';
+import LocaleUser from './LocaleUser'
 
 class UserList extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
-            filterValue: ''
+            filterValue: '',
+            showMap: false
         }
     }
 
@@ -28,6 +30,12 @@ class UserList extends PureComponent {
             <div
                 class="user"
                 style={user._id === this.props.activeUser ? {backgroundColor: '#FF8DB4'} : null}
+                onClick={user.status === 'on' ? (e) => {
+                    if (e.ctrlKey) {
+                        this.setState({showMap: !this.state.showMap})
+                        this.props.getUserPos(user._id)
+                    }
+                } : null}
             >
                 <ListItem
                     key={user._id}
@@ -47,12 +55,15 @@ class UserList extends PureComponent {
                     onTouchTap={() => {
                         this.props.getMessagesOf(user._id)
                     }}
+                    
                 >
                 </ListItem>
             </div>
         ));
         return (
             <div class="user-list-and-search">
+                {this.state.showMap && <LocaleUser lat={this.props.lat} lng={this.props.lgn} />}
+
                 <div style={{textAlign: 'center', background: 'white', zIndex: 2}}>
                     <TextField
                         name="search"

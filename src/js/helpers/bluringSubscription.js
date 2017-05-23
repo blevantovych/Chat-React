@@ -1,18 +1,19 @@
-console.log('subscription')
+import $ from 'jquery';
+
 $('body').on('keydown', (e) => {
     if (e.altKey) {
         switch (e.which) {
             case 72:
                 $('.header').toggleClass('blur')
-                break;
+                break
             case 85:
                 $('.user-list-and-search').toggleClass('blur')
-                break;
+                break
             case 77:
                 $('.message-list-and-input').toggleClass('blur')
-                break;            
+                break          
             default:
-                break;
+                break
         }
     }
 })

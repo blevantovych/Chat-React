@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 class LocaleUser extends Component {
     myMap = () => {
         const mapProp= {
-            center: new google.maps.LatLng(51.508742,-0.120850),
-            zoom:5,
+            center: new google.maps.LatLng(this.props.lat, this.props.lng),
+            zoom: 17,
         };
         const map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        const marker = new google.maps.Marker({position:mapProp.center});
+        marker.setMap(map);
     }
     componentDidMount() {
         this.myMap()
@@ -14,8 +16,7 @@ class LocaleUser extends Component {
     
     render() {
         return (
-            <div>
-                <h1>My First Google Map</h1>
+            <div class="map">
                 <div id="googleMap" style={{width: '400px', height: '400px'}}></div>
             </div>
         );

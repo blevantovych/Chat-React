@@ -1,5 +1,5 @@
-import React from 'react';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import React from 'react'
+import { Tabs, Tab } from 'material-ui/Tabs'
 import Login from './Login'
 import Signup from './Signup'
 
@@ -24,8 +24,8 @@ export default class TabsExampleControlled extends React.Component {
   handleChange = (value) => {
     this.setState({
       value: value,
-    });
-  };
+    })
+  }
 
   render() {
     return (
@@ -48,6 +48,6 @@ export default class TabsExampleControlled extends React.Component {
           </Tab>
         </Tabs>
       </div>
-    );
+    )
   }
 }
