@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, RaisedButton, Card, CardText } from 'material-ui'
+import { TextField, RaisedButton, Card } from 'material-ui'
 import DatePicker from 'material-ui/DatePicker'
 import ImagePicker from './ImagePicker'
 import './profile.scss'
@@ -9,16 +9,19 @@ class Profile extends Component {
     constructor(props) {
         super(props);
     }
+
     username = this.props.user.username
     email = this.props.user.email
     bday = this.props.user.bday
+
     render() {
         return (
             <div class="profile-wrapper">
                 <div class="image-upload">
                     <ImagePicker
                         uploadImageToServer={this.props.uploadImageToServer}
-                        image={this.props.user.fileContent} />
+                        image={this.props.user.fileContent}
+                    />
                 </div>
                 <div class="user-info">
                     <Card style={{boxShadow: 'none'}}>

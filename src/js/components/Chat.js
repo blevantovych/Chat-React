@@ -14,8 +14,9 @@ class Chat extends PureComponent {
       <div style={{margin: 'auto', width: '80vw'}}>
         <div class="container-messagelist-userlist">
           <UserList
-            lat={this.props.lat}
-            lgn={this.props.lgn}
+            removeRequestGps={this.props.removeRequestGps}
+            requestGPSuser={this.props.requestGPSuser}
+            usersCoords={this.props.usersCoords}
             users={this.props.users}
             onInputChange={this.props.onUserListInputChanged}
             getMessagesOf={this.props.getMessagesOf}

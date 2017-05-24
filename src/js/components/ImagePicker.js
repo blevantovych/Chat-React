@@ -36,8 +36,8 @@ export default class ImagePicker extends React.Component {
               height: 300
           }
         })
-        window.dispatchEvent(new Event('resize')) // because lag in material-ui dialog (it is not centered)
-
+        // because of lag in material-ui dialog (it is not centered)
+        window.dispatchEvent(new Event('resize'))
     }
     reader.readAsDataURL(input.files[0])
   }

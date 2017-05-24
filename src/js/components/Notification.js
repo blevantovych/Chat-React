@@ -31,9 +31,10 @@ class Notification extends Component {
         let usersWithBday = this.props.notification.who.map(u => {
             const age = (new Date()).getYear() - (new Date(u.bday)).getYear()
             return <ListItem
+                        class="notif_item"
                         key={u._id}
                         primaryText={<div>{u.username} turned <span class="age_birthday">{age}</span> today</div>}
-                        leftAvatar={<Avatar src={u.fileContent} />}
+                        leftAvatar={<div class="notif_avatar"><Avatar src={u.fileContent} /></div>}
                         onTouchTap={() => {
                             this.props.writeBirthdayBoy(u._id)
                             this.setState({open: false})

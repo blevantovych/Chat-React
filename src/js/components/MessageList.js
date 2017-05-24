@@ -45,10 +45,11 @@ class MessageList extends PureComponent {
             const codeMessage = message.msg.indexOf('#code\n') !== -1
             const messageText = codeMessage
                 ? <div style={u_id === message.from ? {marginRight: '10px'} : null}>
-                    <HighlightCode code={message.msg}/>
+                    <HighlightCode code={message.msg} />
                   </div> 
                 : <div
                     style={u_id === message.from ? {marginRight: '10px'} : null}
+                    class='message-text'
                     dangerouslySetInnerHTML={{
                         __html: replaceNewLinesWithBr(replaceURLWithHTMLLinks(message.msg, message.image))
                     }}>
@@ -80,6 +81,7 @@ class MessageList extends PureComponent {
                         primaryText={messageText}
                         secondaryText={
                             <span
+                                class="message-date"
                                 style={u_id === message.from ? {marginRight: '10px'} : null}
                             >
                                 {(new Date(message.time)).toLocaleString()}

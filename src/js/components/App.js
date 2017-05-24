@@ -43,11 +43,11 @@ class App extends Component {
             users: [],
             newMessages: {},
             logged: false,
+            requestGPSuser: null,
             user: {
                 username: '',
             },
-            lat: null,
-            lgn: null,
+            usersCoords: {},
             socket: null,
             view: 'login' // ['profile', 'login', 'chat', 'prefs']
         }
@@ -132,7 +132,7 @@ class App extends Component {
             body: JSON.stringify({ username, email, password, fileContent: initialImage })
         }
         fetch(SIGNUP_URL, myInit)
-            .then(res => res.json())
+            .then(res => console.log(res))
             .then(res => {
                 this.login(username, password)
             })
@@ -213,7 +213,8 @@ class App extends Component {
 
             let updatedUsers = this.state.users.map(u => {
                 if (u.username === who.username) {
-                    u.status = 'off'
+                    u.status = 'off',
+                    u.lastTimeOnline = Date.now()
                 }
                 return u
             })
@@ -225,24 +226,36 @@ class App extends Component {
         socket.on('getpos', (pos) => {
 
             console.log(pos)
-            this.setState({lat: pos.lat, lgn: pos.lgn})
+            let newCoords = Object.assign({}, this.state.usersCoords, {[pos.from]: {
+                lat: pos.lat,
+                lgn: pos.lgn
+            }})
+            this.setState({usersCoords: newCoords})
 
         })
 
-        socket.on('requestPos', (fromWho) => {
+        socket.on('requestPos', (who) => {
 
             console.log('requesting position')
-            if (fromWho.id === this.state.user._id) {
+            if (who.id === this.state.user._id) {
                 
                 console.log('this is to me')
-                navigator.geolocation.getCurrentPosition((location) => {
+                if (who.id in this.state.usersCoords) {
                     this.state.socket.emit('getpos', {
-                        lat: location.coords.latitude,
-                        lgn: location.coords.longitude,
-                        acc: location.coords.accuracy,
-                        from: this.state.user._id
+                        ...this.state.usersCoords[who.id],
+                        from: who.id
                     })
-                })
+                } else {
+                    navigator.geolocation.getCurrentPosition((location) => {
+                        this.state.socket.emit('getpos', {
+                            lat: location.coords.latitude,
+                            lgn: location.coords.longitude,
+                            acc: location.coords.accuracy,
+                            from: this.state.user._id
+                        })
+                    })
+                }
+                
             }
 
         })
@@ -275,8 +288,13 @@ class App extends Component {
     getUserPos = (id) => {
         console.log('getting user pos')
         this.state.socket.emit('requestPos', {
-            id
+            id,
         })
+        this.setState({requestGPSuser: id})
+    }
+
+    removeRequestGps = () => {
+        this.setState({requestGPSuser: null})
     }
     
     uploadImageToServer = (base64) => {
@@ -377,9 +395,10 @@ class App extends Component {
         switch (this.state.view) {
             case 'chat':
                 mainContent = <Chat
-                  lat={this.state.lat}
-                  lgn={this.state.lgn}
+                  requestGPSuser={this.state.requestGPSuser}
+                  usersCoords={this.state.usersCoords}
                   onSendClick={this.sendMessage}
+                  removeRequestGps={this.removeRequestGps}
                   getUserPos={this.getUserPos}
                   users={sortUsers(this.state.users, this.state.newMessages)}
                   getMessagesOf={this.getMessagesOf}
